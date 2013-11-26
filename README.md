@@ -1,6 +1,11 @@
-# REST API SDK for Awaaz.De XACT APIs
+# Awaaz.De XACT Rest API
 
-This repository contains client code samples to consume/call Awaaz.De XACT REST APIs in various languages
+This repository contains client code samples to consume/call Awaaz.De XACT REST APIs in various languages.
+
+
+## What is  Awaaz.De Xact?
+
+Want to learn more about Xact ? Check this http://bit.ly/awaazde-xact-concept
 
 
 ## Prerequisites
