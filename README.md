@@ -15,7 +15,7 @@ Want to learn more about Xact ? Check this http://bit.ly/awaazde-xact-concept
    * Jersy Bundle (See https://jersey.java.net/)
    * Note that all of these libraries are already present into lib folder, but you might want to download and add latest version.
 
-   For PHP
+For PHP
    * Pest (See https://github.com/educoder/pest)
    * Note that pest is already included under lib folder, but you might want to download and add latest version.
 
