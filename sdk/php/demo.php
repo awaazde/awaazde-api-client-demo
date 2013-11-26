@@ -28,7 +28,7 @@ $callMgr = new CallManager($authdata);
 
 //getting specific call info
 echo "<h3>Getting specific call data</h3>";
-//html_show_array($callMgr->get('10'));
+html_show_array($callMgr->get('10'));
 
 //creating new call
 echo "<h3>Creating new call</h3>";
@@ -40,7 +40,7 @@ $calldata = array(
     'send_on' => '2013-11-30T14:32:00'
 	);
 	
-//html_show_array($callMgr->create($calldata));
+html_show_array($callMgr->create($calldata));
 
 
 //editing call data
@@ -54,7 +54,7 @@ $calldata = array(
     'send_on' => '2013-12-01T14:32:00'
 	);
 	
-//html_show_array($callMgr->modify($callId, $calldata));
+html_show_array($callMgr->modify($callId, $calldata));
 
 
 //deleting call data
