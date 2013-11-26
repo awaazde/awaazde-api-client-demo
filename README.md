@@ -5,10 +5,10 @@ This repository contains client code samples to consume/call Awaaz.De XACT REST 
 
 ## Prerequisites
 
-   * For Java
-	     * Jackson (See http://wiki.fasterxml.com/JacksonHome)
-		 * Jersy Bundle (See https://jersey.java.net/)
-		 * Note that all of these libraries are already present into lib folder, but you might want to download latest version.
+   For Java
+   * Jackson (See http://wiki.fasterxml.com/JacksonHome)
+   * Jersy Bundle (See https://jersey.java.net/)
+   * Note that all of these libraries are already present into lib folder, but you might want to download latest version.
 
 
  
@@ -20,8 +20,6 @@ To use samples for a particular language
    * Copy the project on your local enviroment.
    * Check and run demo class. For java its XACTClientDemo.java.
 
-
-## Contributing
 
 ## More help
 
