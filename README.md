@@ -26,7 +26,7 @@ For PHP
 To use samples for a particular language
 
    * Copy the project on your local enviroment.
-   * Check and run demo class. For java its XACTClientDemo.java, demo.php for PHP.
+   * Check and run demo class. For java its XACTClientDemo.java while for php its demp.php.
 
 
 ## More help
