@@ -48,7 +48,7 @@ public class XACTClientDemo {
 			System.out.println(callDataMgr.getAll());
 
 			Map<String, Object> data  = new HashMap<String, Object>();
-			data.put("recipient", "9904602242");
+			data.put("recipient", "0123456789"); //phone number
 			data.put("text", "You have 99 elephants waiting at awaaz");
 			data.put("send_on", "2013-11-30T14:32:00");
 
