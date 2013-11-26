@@ -13,8 +13,11 @@ Want to learn more about Xact ? Check this http://bit.ly/awaazde-xact-concept
    For Java
    * Jackson (See http://wiki.fasterxml.com/JacksonHome)
    * Jersy Bundle (See https://jersey.java.net/)
-   * Note that all of these libraries are already present into lib folder, but you might want to download latest version.
+   * Note that all of these libraries are already present into lib folder, but you might want to download and add latest version.
 
+   For PHP
+   * Pest (See https://github.com/educoder/pest)
+   * Note that pest is already included under lib folder, but you might want to download and add latest version.
 
  
     
@@ -23,7 +26,7 @@ Want to learn more about Xact ? Check this http://bit.ly/awaazde-xact-concept
 To use samples for a particular language
 
    * Copy the project on your local enviroment.
-   * Check and run demo class. For java its XACTClientDemo.java.
+   * Check and run demo class. For java its XACTClientDemo.java, demo.php for PHP.
 
 
 ## More help
