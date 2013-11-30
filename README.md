@@ -16,6 +16,7 @@ Want to learn more about Xact ? Check this http://bit.ly/awaazde-xact-concept
    * Note that all of these libraries are already present into lib folder, but you might want to download and add latest version.
 
 For PHP
+   * A 'curl' extension must be enable for your php installation.
    * Pest (See https://github.com/educoder/pest)
    * Note that pest is already included under lib folder, but you might want to download and add latest version.
 
