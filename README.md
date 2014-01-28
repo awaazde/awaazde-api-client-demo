@@ -20,7 +20,7 @@ For PHP
    * Pest (See https://github.com/educoder/pest)
    * Note that pest is already included under lib folder, but you might want to download and use latest version.
 
-   For Python
+For Python
    * Requests(http://docs.python-requests.org/en/latest/) needs to be installed.
    
     
