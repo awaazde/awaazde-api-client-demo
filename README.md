@@ -20,14 +20,16 @@ For PHP
    * Pest (See https://github.com/educoder/pest)
    * Note that pest is already included under lib folder, but you might want to download and use latest version.
 
- 
+   For Python
+   * Requests(http://docs.python-requests.org/en/latest/) needs to be installed.
+   
     
 ## Usage
 
 To use samples for a particular language.
 
    * Copy the project on your local enviroment.
-   * Run demo class. For java its XACTClientDemo.java and for PHP its demo.php.
+   * Run demo class. For java its XACTClientDemo.java, for PHP its demo.php and for python its demo.py.
 
 
 ## More help
