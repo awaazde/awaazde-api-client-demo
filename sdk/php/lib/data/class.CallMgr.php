@@ -31,7 +31,7 @@ class CallManager {
     */
 	public function getAll() {
 		try {		    
-			$calljson = $this->pest->get('/call/');
+			$calljson = $this->pest->get('/calls/');
 			return json_decode($calljson,true);
 		} 
 		catch (Exception $e) {
@@ -48,7 +48,7 @@ class CallManager {
     */
 	public function get($callId) {
 		try {		    
-			$calljson = $this->pest->get('/call/' . $callId .'/');
+			$calljson = $this->pest->get('/calls/' . $callId .'/');
 			return json_decode($calljson,true);
 		}
 		catch (Exception $e) {
@@ -65,7 +65,7 @@ class CallManager {
     */
 	public function create($data) {
 		try {		    
-			$calljson = $this->pest->post('/call/', $data);
+			$calljson = $this->pest->post('/calls/', $data);
 			return json_decode($calljson,true);
 		}
 		catch (Exception $e) {
@@ -83,7 +83,7 @@ class CallManager {
     */
 	public function modify($callId, $data) {
 		try {		    
-			$calljson = $this->pest->put('/call/'.$callId .'/', $data);
+			$calljson = $this->pest->put('/calls/'.$callId .'/', $data);
 			return json_decode($calljson,true);
 		}
 		catch (Exception $e) {
@@ -100,7 +100,7 @@ class CallManager {
     */
 	public function delete($callId) {
 		try {		    
-			$this->pest->delete('/call/'.$callId .'/');
+			$this->pest->delete('/calls/'.$callId .'/');
 		}
 		catch (Exception $e) {
 			echo "<br>Caught exception when deleting call data : " .  $e->getMessage() . "<br>";

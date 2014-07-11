@@ -36,7 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class CallDataManager extends DataManager { 
 	
-	private static final String CALL_METHOD_NAME = "call";
+	private static final String CALL_METHOD_NAME = "calls";
 	//requester
 	private XACTRequester x_requester;
 	//Objectmapper
