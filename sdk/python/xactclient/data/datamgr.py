@@ -25,13 +25,12 @@ class TemplateMgr:
         response = requests.get(self.authdata.getUrl() + TEMPLATE_WS_URL, auth=(self.authdata.getUsername(), self.authdata.getPassword()))
         if response.status_code == 200:
             templates_data = []
-            index = 0;
-            for template in response.data['results']:
+            for template in response.json()['results']:
                 templates_data.append(template)
             
             return templates_data
         else:
-            return response.data
+            return response.text
     
     '''
     returns template detail for given template id
@@ -62,10 +61,8 @@ class CallMgr:
         response = requests.get(self.authdata.getUrl() + CALL_WS_URL, auth=(self.authdata.getUsername(), self.authdata.getPassword()))
         if response.status_code == 200:
             calls_data = []
-            index = 0;
-            for call in response.json():
-                calls_data.insert(index, call)
-                index = index + 1
+            for call in response.json()['results']:
+                calls_data.append(call)
             
             return calls_data
         else:
