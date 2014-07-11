@@ -8,8 +8,8 @@
 import requests
 import simplejson as json
 
-TEMPLATE_WS_URL = '/template'
-CALL_WS_URL = '/call'
+TEMPLATE_WS_URL = '/templates'
+CALL_WS_URL = '/calls'
 
 class TemplateMgr:
     '''
