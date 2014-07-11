@@ -26,13 +26,12 @@ class TemplateMgr:
         if response.status_code == 200:
             templates_data = []
             index = 0;
-            for template in response.json():
-                templates_data.insert(index, template)
-                index = index + 1
+            for template in response.data['results']:
+                templates_data.append(template)
             
             return templates_data
         else:
-            return response.text
+            return response.data
     
     '''
     returns template detail for given template id
