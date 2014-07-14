@@ -1,4 +1,4 @@
-# Awaaz.De Rest API
+# Awaaz.De Rest APIs
 
 This repository contains SDKs to consume/call Awaaz.De REST APIs.
 
