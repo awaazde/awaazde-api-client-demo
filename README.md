@@ -1,11 +1,11 @@
-# Awaaz.De XACT Rest API
+# Awaaz.De Rest API
 
-This repository contains SDKs to consume/call Awaaz.De XACT REST APIs.
+This repository contains SDKs to consume/call Awaaz.De REST APIs.
 
 
-## What is  Awaaz.De Xact?
+## What is  Awaaz.De APIs?
 
-Want to learn more about Xact ? Check this http://bit.ly/awaazde-xact-concept
+Want to learn more about it ? Check this http://awaaz.de/console/api/docs/
 
 
 ## Prerequisites
@@ -34,5 +34,5 @@ To use samples for a particular language.
 
 ## More help
 
-   * [API Reference](http://awaaz.de/console/xact/)
+   * [API Reference](http://awaaz.de/console/api/docs/)
    * [Reporting issues / feature requests] (https://github.com/nikhiln/awaazde-api-client/issues)
