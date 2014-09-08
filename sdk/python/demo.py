@@ -13,7 +13,7 @@ from xactclient.common.authdata import AuthData
 
 USERNAME = 'your username'
 PASSWORD = 'password'
-WS_URL = 'http://awaaz.de/console/xact'
+WS_URL = 'https://awaaz.de/console/xact'
 
 def main():
     authdata= AuthData(USERNAME,PASSWORD,WS_URL)

@@ -33,7 +33,7 @@ public class XACTClientDemo {
 	public static String USERNAME = "<provide your username here>";
 	public static String PASSWORD = "<provide your pass here>";
 	
-	public static String BASE_URL = "http://awaaz.de/console/xact/";
+	public static String BASE_URL = "https://awaaz.de/console/xact/";
 	
 	/**
 	 * @param args
