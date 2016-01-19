@@ -13,10 +13,9 @@ from xactclient.common.authdata import AuthData
 
 from streamclient.data.datamgr import GroupMgr
 
-USERNAME = 'nikhil@awaaz.de'
-PASSWORD = 'welcome'
-#WS_URL = 'http://127.0.0.1:8000/console/xact'
-WS_URL = 'http://127.0.0.1:8000/console'
+USERNAME = 'your user name'
+PASSWORD = 'password'
+WS_URL = 'https://awaaz.de/console'
 
 def main():
     authdata= AuthData(USERNAME,PASSWORD,WS_URL)
