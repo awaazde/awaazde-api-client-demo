@@ -12,17 +12,18 @@ from xactclient.data.datamgr import CallMgr
 from xactclient.common.authdata import AuthData
 
 USERNAME = 'your username'
-PASSWORD = 'password'
+PASSWORD = 'your password'
 WS_URL = 'https://awaaz.de/console/xact'
 
 def main():
     authdata= AuthData(USERNAME,PASSWORD,WS_URL)
     
     templateMgr = TemplateMgr(authdata)
+
     
     print 'Getting all templates'
     print templateMgr.getAll()
-    
+
     print 'Getting template data with id 1'
     print templateMgr.getTemplate('1')
     
@@ -45,6 +46,24 @@ def main():
     
     print "deleting a call"
     print callMgr.delete("5007")
+    
+
+    """
+    Creating a new template with wildcard _W+_ which allows ad-hoc messages
+    """
+    templateData = {'text': '_W+_', 'vocabulary': ['msg1', 'msg2'], 'language': 'eng'}
+    template = templateMgr.create(templateData)
+    print template
+    template_id = template['id']
+
+    
+    file = '/home/nikhil/apps/awaazde-api-client-sdk/sdk/python/msg1.wav'
+    # uploading the audio files
+    print templateMgr.upload_file(template_id, file)
+    
+    # uploading file by providing file url
+    file_url = 'http://www.pacdv.com/sounds/voices/come-on-1.wav'
+    print templateMgr.upload_file(template_id, file_url, is_url=True)
     
 if __name__ =='__main__':main()
 

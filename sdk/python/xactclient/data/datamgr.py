@@ -10,6 +10,7 @@ import simplejson as json
 
 TEMPLATE_WS_URL = '/templates'
 CALL_WS_URL = '/calls'
+FILE_WS_URL = '/files'
 
 class TemplateMgr:
     '''
@@ -45,7 +46,71 @@ class TemplateMgr:
             return template
         else:
             return response.text
-    
+
+
+    '''
+    creating new temnplate
+    '''
+    def create(self, templatedata):
+        headers = {'content-type': 'application/json'}
+        response = requests.post(self.authdata.getUrl() + TEMPLATE_WS_URL + "/", data=json.dumps(templatedata), headers=headers, auth=(self.authdata.getUsername(), self.authdata.getPassword()))
+        if response.status_code == 201:
+            template = None
+            if response.json():
+                template = response.json()
+            return template
+        else:
+            return response.text
+
+
+    '''
+    editing template
+    '''
+    def update(self, id, templatedata):
+        headers = {'content-type': 'application/json'}
+        response = requests.put(self.authdata.getUrl() + TEMPLATE_WS_URL + '/' + id, data=json.dumps(templatedata), headers=headers, auth=(self.authdata.getUsername(), self.authdata.getPassword()))
+        if response.status_code == 201:
+            template = None
+            if response.json():
+                template = response.json()
+
+            return template
+        else:
+            return response.text
+
+
+    '''
+    deleting template
+    '''
+    def delete(self, id):
+        headers = {'content-type': 'application/json'}
+        response = requests.delete(self.authdata.getUrl() + TEMPLATE_WS_URL + '/' + id, headers=headers, auth=(self.authdata.getUsername(), self.authdata.getPassword()))
+        if response.status_code == 204:
+            return "true"
+        else:
+            return response.text
+
+    '''
+    Upload template file
+    '''
+    def upload_file(self, id, file, is_url=False):
+        #headers = {'content-type': 'application/x-www-urlformencoded'}
+        data = {'template_pk': id}
+        files = {}
+        if is_url is False:
+             files = {'file': open(file, 'rb')}
+        else:
+            data['file_url'] = file
+            
+        url = self.authdata.getUrl() + TEMPLATE_WS_URL + '/' + str(id) + FILE_WS_URL + "/"
+        
+        response = requests.post(url, data=data, files=files, auth=(self.authdata.getUsername(), self.authdata.getPassword()))
+        if response.status_code == 201:
+            if response.json():
+                return response.json()
+            return None
+        else:
+            return response.text
 
 class CallMgr:
     '''
