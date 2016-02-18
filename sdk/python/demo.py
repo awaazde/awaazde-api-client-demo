@@ -11,8 +11,8 @@ from xactclient.data.datamgr import TemplateMgr
 from xactclient.data.datamgr import CallMgr
 from xactclient.common.authdata import AuthData
 
-USERNAME = 'guest'
-PASSWORD = 'guest123'
+USERNAME = 'your username'
+PASSWORD = 'your password'
 WS_URL = 'https://awaaz.de/console/xact'
 
 def main():
