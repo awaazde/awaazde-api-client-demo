@@ -11,8 +11,8 @@ from xactclient.data.datamgr import TemplateMgr
 from xactclient.data.datamgr import CallMgr
 from xactclient.common.authdata import AuthData
 
-USERNAME = 'your username'
-PASSWORD = 'your password'
+USERNAME = 'guest'
+PASSWORD = 'guest123'
 WS_URL = 'https://awaaz.de/console/xact'
 
 def main():
@@ -20,7 +20,6 @@ def main():
     
     templateMgr = TemplateMgr(authdata)
 
-    
     print 'Getting all templates'
     print templateMgr.getAll()
 
@@ -64,6 +63,18 @@ def main():
     # uploading file by providing file url
     file_url = 'http://www.pacdv.com/sounds/voices/come-on-1.wav'
     print templateMgr.upload_file(template_id, file_url, is_url=True)
+
+    # update template example
+    template_id = 32
+    template_data = {
+        "text": "_W+_",
+        "vocabulary": ["msg1", "msg2", "msg3"],
+        "language": "eng"
+    }
+    print templateMgr.update(template_id, template_data)
+
+    # deleting template
+    # print templateMgr.delete(template_id)
     
 if __name__ =='__main__':main()
 

@@ -68,7 +68,7 @@ class TemplateMgr:
     '''
     def update(self, id, templatedata):
         headers = {'content-type': 'application/json'}
-        response = requests.put(self.authdata.getUrl() + TEMPLATE_WS_URL + '/' + id, data=json.dumps(templatedata), headers=headers, auth=(self.authdata.getUsername(), self.authdata.getPassword()))
+        response = requests.put(self.authdata.getUrl() + TEMPLATE_WS_URL + '/' + str(id) + '/', data=json.dumps(templatedata), headers=headers, auth=(self.authdata.getUsername(), self.authdata.getPassword()))
         if response.status_code == 201:
             template = None
             if response.json():
@@ -84,7 +84,7 @@ class TemplateMgr:
     '''
     def delete(self, id):
         headers = {'content-type': 'application/json'}
-        response = requests.delete(self.authdata.getUrl() + TEMPLATE_WS_URL + '/' + id, headers=headers, auth=(self.authdata.getUsername(), self.authdata.getPassword()))
+        response = requests.delete(self.authdata.getUrl() + TEMPLATE_WS_URL + '/' + str(id) + '/', headers=headers, auth=(self.authdata.getUsername(), self.authdata.getPassword()))
         if response.status_code == 204:
             return "true"
         else:
