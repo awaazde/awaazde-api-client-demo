@@ -10,8 +10,8 @@
 require_once 'include_all.php';
 
  // Xact auth info
-$user 		= "<your  username>";
-$password 	= "<password>";
+$user 		= "your username";
+$password 	= "your password";
 $ws_url		= "https://awaaz.de/console/xact/";
 
 //creating a authdata object
@@ -65,4 +65,52 @@ $callId = '7032';
 echo 'deleting call with id' . $callId;
 	
 html_show_array($callMgr->delete($callId));
+
+
+/* templates related apis */
+
+$templateMgr = new TemplateManager($authdata);
+
+//getting all templates
+html_show_array($templateMgr->getAll());
+
+//getting template with id
+html_show_array($templateMgr->get(31));
+
+//creating new template
+$template_data = array (
+    "text" => "This is demo",
+    "vocabulary" => ["msg1", "msg2"],
+    "language" => "eng"
+);
+
+html_show_array($templateMgr->create($template_data));
+
+
+//updating template
+$template_id = 50;
+
+$template_data = array (
+    "text" => "This is demo22",
+    "vocabulary" => ["msg1", "msg2"],
+    "language" => "eng"
+);
+
+html_show_array($templateMgr->update($template_id, $template_data));
+
+
+//uploading files for template
+
+echo "<h3>Uploading files</h3>";
+//actual file
+$file = '/home/nikhil/html/xact/msg1.wav';
+html_show_array($templateMgr->upload_file($template_id, $file, false));
+
+//file url
+$file = 'http://www.pacdv.com/sounds/voices/come-on-1.wav';
+html_show_array($templateMgr->upload_file($template_id, $file, true));
+
+
+echo "<h3>deleting template</h3>";
+html_show_array($templateMgr->delete($template_id));
 ?>

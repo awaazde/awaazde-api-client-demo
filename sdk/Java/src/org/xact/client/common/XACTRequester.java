@@ -16,9 +16,8 @@
 
 package org.xact.client.common;
 
-import java.util.HashMap;
 import java.util.Map;
-
+import java.io.File;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.Client;
@@ -27,7 +26,14 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.multipart.file.FileDataBodyPart;
 import com.sun.jersey.api.client.filter.LoggingFilter;
+import javax.ws.rs.core.MediaType;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.impl.MultiPartWriter;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 /**
  * Its a wrapper for sending calls to xact apis. Requester is responsible for sending any request to xact api.
@@ -92,7 +98,7 @@ public class XACTRequester {
 	 */
 	public String get(String methodUrl) throws XACTRequesterException {
 		//calling webservice
-		WebResource webResource = getClient().resource(x_baseurl + "/" + methodUrl + "/");
+		WebResource webResource = getClient(false).resource(x_baseurl + "/" + methodUrl + "/");
 		ClientResponse response = webResource.accept(ContentFormat.APPLICATION_JSON.getValue()).get(ClientResponse.class);
 		
 		String responseText = response.getEntity(String.class);
@@ -111,7 +117,7 @@ public class XACTRequester {
 	public String post(String methodUrl, Map<String, Object> data) throws XACTRequesterException {
 		String responseText = null;
 		try {
-			WebResource webResource = getClient().resource(x_baseurl + "/" + methodUrl + "/");
+			WebResource webResource = getClient(false).resource(x_baseurl + "/" + methodUrl + "/");
 			ClientResponse response;
 			response = webResource.accept(ContentFormat.APPLICATION_JSON.getValue()).type(ContentFormat.APPLICATION_JSON.getValue()).post(ClientResponse.class, XACTRequester.objMapper.writeValueAsString(data));
 			responseText = response.getEntity(String.class);
@@ -138,7 +144,7 @@ public class XACTRequester {
 	public String put(String methodUrl, Map<String, Object> data) throws XACTRequesterException {
 		String responseText = null;
 		try {
-		WebResource webResource = getClient().resource(x_baseurl + "/" + methodUrl + "/");
+		WebResource webResource = getClient(false).resource(x_baseurl + "/" + methodUrl + "/");
 		ClientResponse response = webResource.accept(ContentFormat.APPLICATION_JSON.getValue()).type(ContentFormat.APPLICATION_JSON.getValue()).put(ClientResponse.class, XACTRequester.objMapper.writeValueAsString(data));
 		responseText = response.getEntity(String.class);
 		if (response.getStatus() != 200)
@@ -161,7 +167,7 @@ public class XACTRequester {
 	 * @throws XACTRequesterException 
 	 */
 	public boolean delete(String methodUrl) throws XACTRequesterException {
-		WebResource webResource = getClient().resource(x_baseurl + "/" + methodUrl + "/");
+		WebResource webResource = getClient(false).resource(x_baseurl + "/" + methodUrl + "/");
 		ClientResponse response = webResource.accept(ContentFormat.APPLICATION_JSON.getValue()).delete(ClientResponse.class);
 		if (response.getStatus() != 204) {
 			String responseText = response.getEntity(String.class);
@@ -169,14 +175,61 @@ public class XACTRequester {
 		}
 		return true;
 	}
+	
+	/**
+	 * Make a post request
+	 * @param methodUrl url
+	 * @param data data which needs to be post
+	 * @return
+	 * @throws XACTRequesterException 
+	 */
+	public String postWithFile(String methodUrl, Map<String, Object> data, File fileToUpload) throws XACTRequesterException {
+		String responseText = null;
+		try {
+			WebResource webResource = getClient(true).resource(x_baseurl + "/" + methodUrl + "/");
+			ClientResponse response;
+			
+			final FormDataMultiPart multiPart = new FormDataMultiPart();
+			if (fileToUpload != null) {
+				FileDataBodyPart filePart = new FileDataBodyPart("file", fileToUpload);
+				FormDataContentDisposition.FormDataContentDispositionBuilder builder = FormDataContentDisposition.name(filePart.getName());
+				builder.fileName(fileToUpload.getName());
+				builder.size(fileToUpload.length());
+				filePart.setFormDataContentDisposition(builder.build());
+				multiPart.bodyPart(filePart);
+				multiPart.field("filename", fileToUpload.getName());
+			}
+			
+			for (Map.Entry<String, Object> entry : data.entrySet()) {
+				multiPart.field(entry.getKey(), entry.getValue(), MediaType.MULTIPART_FORM_DATA_TYPE);
+			}
+			
+			response = webResource.accept(ContentFormat.APPLICATION_JSON.getValue()).type(MediaType.MULTIPART_FORM_DATA).post(ClientResponse.class, multiPart);
+			responseText = response.getEntity(String.class);
+			if (response.getStatus() != 201)
+				throw new XACTRequesterException(responseText, XACTRequesterException.XACTExceptionErrorCode.DATA_POST_ERROR);
+		} catch (UniformInterfaceException e) {
+			throw new XACTRequesterException(e.getLocalizedMessage(), XACTRequesterException.XACTExceptionErrorCode.DATA_POST_ERROR);
+		} catch (ClientHandlerException e) {
+			throw new XACTRequesterException(e.getLocalizedMessage(), XACTRequesterException.XACTExceptionErrorCode.DATA_POST_ERROR);
+		}
+		return responseText;
+	}
 
 	/**
 	 * Returns jersey client to make any call to webservice 
 	 * @return
 	 */
-	private Client getClient() {
+	private Client getClient(boolean is_multipart) {
 		if(m_client == null) {
-			m_client = new Client();
+			if(is_multipart) {
+				ClientConfig config = new DefaultClientConfig();
+				config.getClasses().add(MultiPartWriter.class);
+				m_client = Client.create(config);
+			} else {
+				m_client = new Client();
+			}
+			
 			if(!isTokenbasedAuth) {
 				final HTTPBasicAuthFilter authFilter = new HTTPBasicAuthFilter(x_username, x_password);
 				m_client.addFilter(authFilter);
