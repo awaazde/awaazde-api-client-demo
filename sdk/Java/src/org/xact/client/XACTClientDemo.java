@@ -23,6 +23,7 @@ import org.xact.client.common.XACTRequester;
 import org.xact.client.data.CallDataManager;
 import org.xact.client.data.TemplatesDataManager;
 import org.xact.client.data.UsersDataManager;
+import org.xact.client.data.WebhookManager;
 
 /**
  * It demonstrate on how to call xact apis
@@ -45,6 +46,7 @@ public class XACTClientDemo {
 			//Creates XACTRequester object to call any api
 			XACTRequester requester = new XACTRequester(USERNAME, PASSWORD, BASE_URL);
 
+			
 			//getting call information
 			CallDataManager callDataMgr = new CallDataManager(requester);
 			
@@ -85,7 +87,7 @@ public class XACTClientDemo {
 			template_data.put("text", "This is demo - updated");
 			System.out.println(tmpltDataMgr.modify("51", template_data));
 			
-			/* template file upload */
+			// template file upload
 			// uploading file object
 			File fileToUpload = new File("/home/nikhil/apps/awaazde-api-client-sdk/sdk/php/msg1.wav");
 			System.out.println(tmpltDataMgr.upload_file("51", fileToUpload));
@@ -105,6 +107,25 @@ public class XACTClientDemo {
 			//getting specific user detail
 			System.out.println(usrDataMgr.get("2"));
 			
+			
+			//webhook
+			WebhookManager whManager = new WebhookManager(requester);
+			System.out.println(whManager.getAll());
+			
+			//getting specific webhook
+			System.out.println(whManager.get("1"));
+			
+			//creating new
+			Map<String, Object> webhook_data  = new HashMap<String, Object>();
+			webhook_data.put("url", "https://awaaz.de/webhook");
+			System.out.println(whManager.create(webhook_data));
+			
+			//updating
+			webhook_data.put("url", "https://awaaz.de/webhook/2/");
+			System.out.println(whManager.modify("3", webhook_data));
+			
+			//deleting
+			System.out.println(whManager.delete("3"));
 			
 		} catch(Exception e) {
 			e.printStackTrace();

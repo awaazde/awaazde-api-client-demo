@@ -19,6 +19,7 @@ $authdata = new AuthData($user, $password, $ws_url);
 
 //getting call information
 
+
 echo "<h3>Getting all call information</h3>";
 
 $callMgr = new CallManager($authdata);
@@ -67,7 +68,7 @@ echo 'deleting call with id' . $callId;
 html_show_array($callMgr->delete($callId));
 
 
-/* templates related apis */
+// templates related apis
 
 $templateMgr = new TemplateManager($authdata);
 
@@ -113,4 +114,28 @@ html_show_array($templateMgr->upload_file($template_id, $file, true));
 
 echo "<h3>deleting template</h3>";
 html_show_array($templateMgr->delete($template_id));
+
+
+$webHookMgr = new WebhookManager($authdata);
+
+//getting all templates
+html_show_array($webHookMgr->getAll());
+
+//getting template with id
+html_show_array($webHookMgr->get(11));
+
+//creating new template
+$url = "https://awaaz.de/webhook/";
+
+html_show_array($webHookMgr->create($url));
+
+
+//updating template
+$id = 11;
+$new_url = "https://awaaz.de/webhook/upd/";
+html_show_array($webHookMgr->modify($id, $new_url));
+
+//deleting webhook
+html_show_array($webHookMgr->delete($id));
+
 ?>

@@ -107,3 +107,110 @@ class CallManager {
 		}
 	}
 }
+
+
+/*
+Webhook Manager
+*/
+class WebhookManager {
+	
+	/*** auth data ***/
+	private $authdata;
+	
+	
+	/*** pest object ***/
+	private $pest;
+	
+	/*** the constructor ***/
+	public function __construct($authdata){
+		$this->authdata = $authdata;
+		$this->pest = new Pest($authdata->getUrl());
+		$this->pest->setupAuth($authdata->getUsername(),$authdata->getPassword());
+		$this->pest->curl_opts[CURLOPT_FOLLOWLOCATION] = false; // Not supported on hosts running safe_mode!
+	}
+	
+	/**
+	 * Returns all webhooks
+     * @return array containing all webhooks
+     * 
+    */
+	public function getAll() {
+		try {		    
+			$hooksjson = $this->pest->get('/webhook/');
+			return json_decode($hooksjson,true);
+		} 
+		catch (Exception $e) {
+			echo "<br>Caught exception when retrieving webhook data : " .  $e->getMessage() . "<br>";
+		}
+	}
+	
+	/**
+	 * Returns webhook
+	 * @id id of webhook
+	 * 
+     * @return 
+     * 
+    */
+	public function get($id) {
+		try {		    
+			$hooksjson = $this->pest->get('/webhook/' . $id .'/');
+			return json_decode($hooksjson,true);
+		}
+		catch (Exception $e) {
+			echo "<br>Caught exception when retrieving webhook : " .  $e->getMessage() . "<br>";
+		}
+	}
+	
+	/**
+	 * created new webhook
+	 * @data 
+	 * 
+     * @return
+     * 
+    */
+	public function create($url) {
+		try {		    
+			$data = array("url" => $url);
+			$hooksjson = $this->pest->post('/webhook/', $data);
+			return json_decode($hooksjson,true);
+		}
+		catch (Exception $e) {
+			echo "<br>Caught exception when creating webhook : " .  $e->getMessage() . "<br>";
+		}
+	}
+	
+	/**
+	 * Modifies existing webhook
+	 * @id
+	 * @data 
+	 * 
+     * @return
+     * 
+    */
+	public function modify($id, $url) {
+		try {
+			$data = array("url" => $url);
+			$hooksjson = $this->pest->put('/webhook/'.$id .'/', $data);
+			return json_decode($hooksjson,true);
+		}
+		catch (Exception $e) {
+			echo "<br>Caught exception when editing webhook : " .  $e->getMessage() . "<br>";
+		}
+	}
+	
+	/**
+	 * Delete webhook with id id
+	 * @id
+	 * 
+     * @return
+     * 
+    */
+	public function delete($id) {
+		try {		    
+			$this->pest->delete('/webhook/'.$id .'/');
+		}
+		catch (Exception $e) {
+			echo "<br>Caught exception when deleting webhook : " .  $e->getMessage() . "<br>";
+		}
+	}
+}

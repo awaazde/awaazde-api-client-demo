@@ -7,12 +7,11 @@
 #===============================================================================
 
 
-from xactclient.data.datamgr import TemplateMgr
-from xactclient.data.datamgr import CallMgr
+from xactclient.data.datamgr import TemplateMgr,CallMgr,WebhookMgr
 from xactclient.common.authdata import AuthData
 
 USERNAME = 'your username'
-PASSWORD = 'your password'
+PASSWORD = 'password'
 WS_URL = 'https://awaaz.de/console/xact'
 
 def main():
@@ -20,6 +19,7 @@ def main():
     
     templateMgr = TemplateMgr(authdata)
 
+    
     print 'Getting all templates'
     print templateMgr.getAll()
 
@@ -75,6 +75,24 @@ def main():
 
     # deleting template
     # print templateMgr.delete(template_id)
+    
+    
+    webhookMgr = WebhookMgr(authdata)
+    print "getting all webhooks"
+    print webhookMgr.getAll()
+    
+    print "getting specific webhook"
+    print webhookMgr.get(3)
+    
+    print "creating new webhook"
+    print webhookMgr.create('https://awaaz.de/webhook/')
+    
+    print "updating webhook"
+    print webhookMgr.update(5, 'https://awaaz.de/webhook_upd/')
+    
+    print "deleting webhook"
+    print webhookMgr.delete(5)
+    
     
 if __name__ =='__main__':main()
 
