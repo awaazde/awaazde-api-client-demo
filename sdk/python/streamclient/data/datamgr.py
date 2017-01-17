@@ -121,6 +121,44 @@ class GroupMgr:
                 return response.json()
         return response.text
 
+    def get_messages(self, message_id=None, group_id=None, send_on_from=None, send_on_till=None,
+                     ordering='-message__date', message_type='POST'):
+        """
+        Returns the list of messages, posted so far or responses that you received from broadcast
+        :param message_id: pk of message (you can filter for multiple with message_id={pk1}&message_id={pk2}...
+        :param group_id: pk of group (multiple supported)
+        :param send_on_from: a date in the format YYYY-MM-DDTHH:MM:SS to filter by message broadcast specified to be
+                sent after the given date
+        :param send_on_till: a date in the format YYYY-MM-DDTHH:MM:SS to filter by message broadcast specified to be
+                sent up to the given date
+        :param ordering: message__date or -message__date to order results by ascending or decreasing message date
+        :param message_type: POST for only posted messages, RESPONSE for only responses, don't include the filter to get all messages
+        :return:
+        """
+        filters = {
+            "ordering": ordering,
+            "message_type":message_type
+        }
+        if message_id:
+            filters['message_id'] = message_id
+        if group_id:
+            filters['group_id'] = group_id
+        if send_on_from:
+            filters['send_on_from'] = send_on_from
+        if send_on_till:
+            filters['send_on_till'] = send_on_till
+
+        response = requests.get(self.authdata.getUrl() + MESSAGE_WS_URL + "/",
+                                auth=(self.authdata.getUsername(), self.authdata.getPassword()))
+        if response.status_code == 200:
+            templates_data = []
+            for template in response.json()['results']:
+                templates_data.append(template)
+
+            return templates_data
+        else:
+            return response.text
+
     def schedule_call(self, id, message, send_on):
         """
         Schedules the broadcast at specified time

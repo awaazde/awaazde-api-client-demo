@@ -10,7 +10,7 @@
 from xactclient.common.authdata import AuthData
 from streamclient.data.datamgr import GroupMgr, WebhookMgr
 
-USERNAME = 'your username/email'
+USERNAME = 'your email'
 PASSWORD = 'password'
 WS_URL = 'https://awaaz.de/console/streams-api'
 
@@ -63,10 +63,10 @@ def main():
     ]}
 
     # removing group members - this will remove all the members specified above
-    print groupMgr.delete_members(group['id'], members)
+    # print groupMgr.delete_members(group['id'], members)
 
     # adding new members
-    print groupMgr.add_members(group['id'], members)
+    # print groupMgr.add_members(group['id'], members)
 
     """
     scheduling the call to group
@@ -82,12 +82,18 @@ def main():
     # your message audio file, it must be wav or mp3
     message_file = '/home/nikhil/apps/awaazde-api-client-sdk/sdk/python/4.wav'
 
-    print groupMgr.schedule_call(group_id, message_file, send_on)
+    # print groupMgr.schedule_call(group_id, message_file, send_on)
 
     # getting the result of broadcast
     # you can get this from above schedule call method response
     message_id = 103747
     # print groupMgr.get_results(message_id)
+
+
+    """
+    getting all the uploaded messages
+    """
+    print groupMgr.get_messages()
 
     """
     Sample code for configuring/managing webhook
