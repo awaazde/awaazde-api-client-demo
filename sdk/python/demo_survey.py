@@ -1,6 +1,6 @@
 # ===============================================================================
 #    Copyright (c) 2014 Awaaz.De
-#    Sample SDK to call awaaz.de xact api in python
+#    Sample SDK to call survey api
 #
 #    @author Nikhil (nikhil@awaaz.de, nikhil.navadiya@gmail.com)
 #
