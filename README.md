@@ -5,34 +5,28 @@ This repository contains SDKs to consume/call Awaaz.De REST APIs.
 
 ## What is  Awaaz.De APIs?
 
-Want to learn more about it ? Check this http://awaaz.de/console/api/docs/
+Want to learn more about it ? Check this http://api.awaaz.de/<organization>/v1/docs/
+Here, <organization> is the name of your registered organization.
 
 
 ## Prerequisites
 
-   For Java
-   * Jackson (See http://wiki.fasterxml.com/JacksonHome)
-   * Jersy Bundle (See https://jersey.java.net/)
-   * Note that both of these libraries are already present into lib folder, but you might want to download and use latest version.
-
 For PHP
-   * A 'curl' extension must be enable for your php installation.
-   * Pest (See https://github.com/educoder/pest)
-   * Note that pest is already included under lib folder, but you might want to download and use latest version.
-
-For Python
-   * Requests(http://docs.python-requests.org/en/latest/) needs to be installed.
+   * Guzzle (See https://github.com/guzzle/guzzle)
+   * Note that guzzle is already included under vendor folder, but you might want to download and use latest version.
    
     
 ## Usage
 
-To use samples for a particular language.
+To use sample for php language.
 
-   * Copy the project on your local enviroment.
-   * Run demo class. For java its XACTClientDemo.java, for PHP its demo.php and for python its demo.py.
+   * Copy the sdk-php folder on your local enviroment.
+   * Run demo class i.e. demo.php
 
 
 ## More help
 
-   * [API Reference](http://awaaz.de/console/api/docs/)
+   * [API Reference](http://api.awaaz.de/<organization>/v1/docs/)
    * [Reporting issues / feature requests] (https://github.com/nikhiln/awaazde-api-client/issues)
+
+## Note that this SDK works for only v2.0 of Awaaz De app. 
