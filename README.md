@@ -5,8 +5,8 @@ This repository contains SDKs to consume/call Awaaz.De REST APIs.
 
 ## What is  Awaaz.De APIs?
 
-Want to learn more about it ? Check this http://api.awaaz.de/<organization>/v1/docs/
-Here, <organization> is the name of your registered organization.
+Want to learn more about it ? Check this http://api.awaaz.de/\<organization\>/v1/docs/
+Here, \<organization\> is the name of your registered organization.
 
 
 ## Prerequisites
@@ -27,6 +27,6 @@ To use sample for php language.
 ## More help
 
    * [API Reference](http://api.awaaz.de/<organization>/v1/docs/)
-   * [Reporting issues / feature requests] (https://github.com/nikhiln/awaazde-api-client/issues)
+   * [Reporting issues / feature requests](https://github.com/nikhiln/awaazde-api-client/issues)
 
 ## Note that this SDK works for only v2.0 of Awaaz De app. 
