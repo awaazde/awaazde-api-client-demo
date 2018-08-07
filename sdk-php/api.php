@@ -75,7 +75,7 @@ class BaseApi {
   // Create new object
 	public function create( $data ) {
     try {
-		  $response = $this->client->request('POST', $this->url, ['headers' => ['Authorization' => $this->authData->token], 'json' => $data]);
+		  $response = $this->client->request('POST', $this->url, ['headers' => ['Authorization' =>  $this->authData->token], 'json' => $data]);
     }catch (RequestException $e) {
       throw new Awaazde_Exception($e->getMessage(), $e->getCode());
     }
