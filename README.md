@@ -29,4 +29,4 @@ To use sample for php language.
    * [API Reference](http://api.awaaz.de/<organization>/v1/docs/)
    * [Reporting issues / feature requests](https://github.com/nikhiln/awaazde-api-client/issues)
 
-## Note that this SDK works for only v2.0 of Awaaz De app. 
+### Note that this SDK works for only v2.0 of Awaaz De app. If you are looking for old version, download release v1.0
