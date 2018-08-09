@@ -29,6 +29,24 @@ try {
 	print_r($e->getMessage());
 }
 
+// Get raw reports
+try {
+	$template_1 = $templateAPI->getRawReports(1);
+	echo 'Getting template raw reports';
+	print_r($template_1);
+} catch (Awaazde_Exception $e) {
+	print_r($e->getMessage());
+}
+
+// Get statistics
+try {
+	$template_1 = $templateAPI->getStatistics(1);
+	echo 'Getting template statistics';
+	print_r($template_1);
+} catch (Awaazde_Exception $e) {
+	print_r($e->getMessage());
+}
+
 // Get all 
 try {
 	$allTemplate = $templateAPI->getAll();
@@ -181,4 +199,13 @@ try {
 	print_r($e->getMessage());
 }
 
+
+// upload message via file
+try {
+	echo ' Uploading messages';
+	$message = $messageAPI->upload("sample_messages.csv");
+	//print_r($message);
+} catch (Awaazde_Exception $e) {
+	print_r($e->getMessage());
+}
 ?>

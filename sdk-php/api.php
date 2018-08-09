@@ -103,6 +103,34 @@ class TemplateAPI extends BaseApi {
         $this->url = $this->authData->baseURL . $this->resource_url;
         parent::__construct();
     }
+
+  /**
+   *  Get perticular template raw data
+   */
+	public function getRawReports( $id ) {
+    try {
+      $url = $this->url . $id . "/raw_data/";
+      $response = $this->client->request('GET', $url, ['headers' => ['Authorization' =>  $this->authData->token]]);
+    } catch (RequestException $e) {
+      throw new Awaazde_Exception($e->getMessage(), $e->getCode());
+    }
+    // Return data
+    return $this->returnData($response);
+  }
+  
+  /**
+   *  Get perticular template statistics data
+   */
+	public function getStatistics( $id ) {
+    try {
+      $url = $this->url . $id . "/statistics/";
+      $response = $this->client->request('GET', $url, ['headers' => ['Authorization' =>  $this->authData->token]]);
+    } catch (RequestException $e) {
+      throw new Awaazde_Exception($e->getMessage(), $e->getCode());
+    }
+    // Return data
+    return $this->returnData($response);
+	}
 }
 
 class TemplateLanguageAPI extends BaseApi {
@@ -121,7 +149,18 @@ class MessageAPI extends BaseApi {
    	function __construct( $authData ) {
         $this->authData = $authData;
         $this->url = $this->authData->baseURL . $this->resource_url;
+        $this->uploadUrl = $this->url . 'import/';
         parent::__construct();
+    }
+
+    /**
+     * Upload messages from given file
+     */
+    public function upload($filePath) {
+      $data = [['name' => 'file', 'contents' => fopen($filePath, 'r')]];
+      $response = $this->client->request('POST', $this->uploadUrl, ['headers' => ['Authorization' => $this->authData->token], 'multipart' => $data]);
+      // Return data
+      return $this->returnData($response);
     }
 }
 

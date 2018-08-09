@@ -21,7 +21,7 @@ For PHP
 To use sample for php language.
 
    * Copy the sdk-php folder on your local enviroment.
-   * Run demo class i.e. demo.php
+   * Run demo - You can copy paste the demo folder on your server, change the auth details and check various example described there
 
 
 ## More help
