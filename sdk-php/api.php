@@ -93,6 +93,19 @@ class BaseApi {
     // Return data
     return $this->returnData($response);
 	}
+
+	  // Delete perticular id data
+	public function delete( $id ) {
+		try {
+		  $url = $this->url . $id . "/";
+		  $response = $this->client->request('DELETE', $url, ['headers' => ['Authorization' =>  $this->authData->token]]);
+		} catch (RequestException $e) {
+		  throw new Awaazde_Exception($e->getMessage(), $e->getCode());
+		}
+		// Return data
+		return $this->returnData($response);
+	}
+
 }
 
 class TemplateAPI extends BaseApi {
