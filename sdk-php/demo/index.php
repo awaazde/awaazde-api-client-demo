@@ -4,10 +4,11 @@
  **/
 require_once 'autoload.php';
 
-$authData = new AuthData('http://localhost:8000/payal/v1/', 'payal@awaaz.de', 'kapil123');
+$authData = new AuthData('https://api.awaaz.de/test-organization/v1/', 'test@awaaz.de', 'test*****');
 
-/*************************************************************************************************************************************************************/
-/** Template API CRUD **/
+
+//****************************************************************************************************************************************
+//** Template API CRUD **
 $templateAPI = new TemplateAPI($authData);
 
 //Create new template example
@@ -76,8 +77,8 @@ try {
 	print_r($e->getMessage());
 }
 
-/*************************************************************************************************************************************************************/
-/** Content API CRUD **/
+//*********************************************************************************************************************************
+//** Content API CRUD **
 
 $contentAPI = new ContentAPI($authData);
 
@@ -134,8 +135,8 @@ try {
 	print_r($e->getMessage());
 }
 
-/*************************************************************************************************************************************************************/
-/** Template Language API API CRUD **/
+//****************************************************************************************************************************************
+//** Template Language API API CRUD **
 $templateLanguageAPI = new TemplateLanguageAPI($authData);
 
 //Create new template language example
@@ -186,8 +187,8 @@ try {
 }
 
 
-/*************************************************************************************************************************************************************/
-/** Message API CRUD **/
+//*******************************************************************************************************************************
+//** Message API CRUD **
 $messageAPI = new MessageAPI($authData);
 
 
@@ -210,6 +211,7 @@ try {
 	print_r($e->getMessage());
 }
 
+// Getting all messages
 try {
 	echo 'Get all messages';
 	$all_message = $messageAPI->getAll();
@@ -218,6 +220,17 @@ try {
 	print_r($e->getMessage());
 }
 
+// Getting all message by using API filter
+try {
+	$filters = ['templatelanguage' => '20'];
+	$all_message = $messageAPI->getAll($filters);
+	echo 'Getting all messages for templatelanguage = 20. Messages found are ';
+	echo $all_message->count;
+} catch (Awaazde_Exception $e) {
+	print_r($e->getMessage());
+}
+
+// Updating message
 try {
 	echo ' Updating message';
 	$data = ['templatelanguage' => 2];

@@ -49,10 +49,10 @@ class BaseApi {
   }
 
   // getAll 
-  public function getAll() {
+  public function getAll($filters=[]) {
     // Sent GET request
     try {
-      $response = $this->client->request('GET', $this->url, ['headers' => ['Authorization' =>  $this->authData->token]]);
+      $response = $this->client->request('GET', $this->url, ['headers' => ['Authorization' =>  $this->authData->token], 'query' => $filters]);
     } catch (RequestException $e) {
       throw new Awaazde_Exception($e->getMessage(), $e->getCode());
     }
