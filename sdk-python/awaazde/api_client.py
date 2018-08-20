@@ -1,4 +1,5 @@
 import requests
+from requests.auth import HTTPBasicAuth
 
 from .exceptions import APIException
 from .resource import APIResource
@@ -10,12 +11,6 @@ class ApiClient(object):
     """
     _auth = None
     _resource = APIResource
-
-    def __init__(self, auth=None):
-        # if no auth passed, let not go further
-        if not auth:
-            raise APIException('No auth data provided')
-        self._auth = auth
 
     def get(self, url, **kwargs):
         """
@@ -52,12 +47,13 @@ class ApiClient(object):
         self._resource = resource
 
     def _request(self, method, url, **kwargs):
+        content = None
         try:
-            result = requests.request(method, url, auth=self._auth, **kwargs)
-            result.raise_for_status()
+            result = requests.request(method, url, **kwargs)
             content = result.content
+            result.raise_for_status()
             status_code = result.status_code
-        except Exception, e:
+        except Exception:
             # catching all exception
-            raise APIException(e.message)
+            raise APIException(content)
         return self._resource.from_json(content) if content and status_code != 204 else True
