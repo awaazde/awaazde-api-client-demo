@@ -155,7 +155,7 @@ def demo_message_api():
     # create new message
     message = {
         'templatelanguage': 1,
-        'phone_number': '+919904602242',
+        'phone_number': '+919999999999',
         'values': ['test2'],
         'tags': ['ad']
     }
