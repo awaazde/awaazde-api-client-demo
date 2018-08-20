@@ -39,7 +39,10 @@ class BaseAPI(object):
         """
         This will return list of resources.
         """
-        return self._client.get(self.url, **self._append_headers(kwargs))
+        data = {}
+        if kwargs:
+            data = {'params': kwargs}
+        return self._client.get(self.url, **self._append_headers(data))
 
     def create(self, data):
         """
@@ -79,11 +82,11 @@ class BaseAPI(object):
         url = "%s%s/" % (self.url, id)
         return self._client.delete(url, **self._append_headers(kwargs))
 
-    def _append_headers(self, data):
+    def _append_headers(self, data, append_content_type=True):
         headers = data.get('headers', {})
         if self._token:
             headers["Authorization"] = "JWT " + str(self._token)
-        if 'content-type' not in headers:
+        if 'content-type' not in headers and append_content_type:
             headers['content-type'] = 'application/json'
         data['headers'] = headers
         return data

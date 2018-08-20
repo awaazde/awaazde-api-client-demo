@@ -18,10 +18,6 @@ class APIResource(dict):
         else:
             raise AttributeError
 
-    def save(self):
-        data = self.copy()
-        self._client.patch(**(data))
-
     def __delitem__(self, prop):
         # on delete, setting value to None
         if prop in self:
@@ -37,4 +33,16 @@ class APIResource(dict):
 
 
 class Template(APIResource):
+    pass
+
+
+class TemplateLanguage(APIResource):
+    pass
+
+
+class Message(APIResource):
+    pass
+
+
+class Content(APIResource):
     pass
