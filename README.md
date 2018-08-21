@@ -31,7 +31,7 @@ To use sample for php language.
 To use sample for python language.
 
    * Copy the sdk-python folder on your local environment.
-   * Refer to `example.py` file for your reference
+   * Refer to `example.py` file for reference on how to call different apis.
 
 ## More help
 
