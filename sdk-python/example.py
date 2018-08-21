@@ -2,7 +2,7 @@ from awaazde import AwaazDeAPI, APIException
 
 username = 'nikhil@awaaz.de'
 password = 'your password'
-organization = 'awaazde'
+organization = 'your organization'
 awaazde = AwaazDeAPI(organization, username, password)
 
 
@@ -141,7 +141,7 @@ def demo_message_api():
     # Message API
     """
     # list down all messages
-    # print awaazde.messages.list()
+    print awaazde.messages.list()
 
     # search messages - by language
     print awaazde.messages.list(templatelanguage=1)
@@ -182,8 +182,17 @@ def demo_message_api():
         print "Error occurred: " + str(e)
 
 
+def demo_message_upload_api():
+    """
+    # Message API Upload
+    """
+    # upload messages
+    print awaazde.messages.upload('/home/nikhil/Desktop/sample_messages.csv')
+
+
 if __name__ == "__main__":
     demo_template_api()
     demo_content_api()
     demo_template_language_api()
     demo_message_api()
+    demo_message_upload_api()

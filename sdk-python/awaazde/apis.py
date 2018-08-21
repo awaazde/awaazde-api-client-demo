@@ -70,3 +70,14 @@ class TemplateLanguageAPI(BaseAPI):
 class MessageAPI(BaseAPI):
     resource_url = 'xact/message/'
     resource_cls = Message
+
+    def upload(self, file_path):
+        """
+        This will create new object
+        """
+        upload_url = self.url + "import/"
+        data = self._append_headers({}, append_content_type=False)
+        if file_path:
+            data['files'] = {'file': open(file_path, 'rb')}
+
+        return self._client.post(upload_url, **data)
