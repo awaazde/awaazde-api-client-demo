@@ -82,6 +82,16 @@ class BaseAPI(object):
         url = "%s%s/" % (self.url, id)
         return self._client.delete(url, **self._append_headers(kwargs))
 
+    def delete_bulk(self, ids):
+        '''
+        given a list of ids, delete them all in one request
+        '''
+        if not ids:
+            raise APIException('Invalid IDs or IDs haven\'t been specified')
+
+        data = {'json' : {'ids': ids}}
+        return self._client.delete(self.url, **self._append_headers(data))
+
     def _append_headers(self, data, append_content_type=True):
         headers = data.get('headers', {})
         if self._token:
