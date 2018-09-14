@@ -72,6 +72,16 @@ class BaseAPI(object):
         data = {'json': data}
         return self._client.patch(url, **self._append_headers(data))
 
+    def put(self, id, data):
+        """
+        This will update the object
+        """
+        if not id:
+            raise APIException('Invalid ID or ID hasn\'t been specified')
+        url = "%s%s/" % (self.url, id)
+        data = {'json': data}
+        return self._client.put(url, **self._append_headers(data))
+
     def delete(self, id, **kwargs):
         """
         This will return the single object
