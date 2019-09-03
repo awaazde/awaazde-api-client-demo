@@ -11,6 +11,13 @@ Here, `\<organization>\` is the name of your registered organization.
 
 ## Prerequisites
 
+For Java
+
+Jackson (See http://wiki.fasterxml.com/JacksonHome)
+Jersy Bundle (See https://jersey.java.net/)
+
+Use Maven to download dependency and mavenize the sdk-java project.
+
 For PHP
    * Guzzle (See https://github.com/guzzle/guzzle)
    * Note that guzzle is already included under vendor folder, but you might want to download and use latest version.
