@@ -29,6 +29,12 @@ For Python
     
 ## Usage
 
+To use sample for java language.
+
+   * Copy the sdk-java folder on your local environment.
+   * Download the required jar dependency using maven. `mvn install` (alternatively you can use ypur favourite editor and update the maven project)
+   * Refer to `APIDemo.java` file for reference on how to call different apis.
+
 To use sample for php language.
 
    * Copy the sdk-php folder on your local environment.
