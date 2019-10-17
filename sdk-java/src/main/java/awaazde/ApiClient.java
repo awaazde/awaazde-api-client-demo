@@ -39,7 +39,9 @@ public class ApiClient {
 		WebResource webResource = client.resource(url);
 		ClientResponse response = webResource.header("Authorization", "JWT " + token).accept(MediaType.APPLICATION_JSON)
 				.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, data);
-
+		if (response.getStatusInfo().getStatusCode() == 403) {
+			return "Token Expired. Please log in again.";
+		}
 		if (response.getStatusInfo().getStatusCode() != 201) {
 			System.out.println(response.getEntity(String.class));
 			return "Resource Not Created";
@@ -51,7 +53,9 @@ public class ApiClient {
 		WebResource webResource = client.resource(url);
 		ClientResponse response = webResource.header("Authorization", "JWT " + token).accept(MediaType.APPLICATION_JSON)
 				.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-
+		if (response.getStatusInfo().getStatusCode() == 403) {
+			return "Token Expired. Please log in again.";
+		}
 		if (response.getStatusInfo().getStatusCode() != 200) {
 			return "Resource Not Found";
 		}
@@ -62,7 +66,9 @@ public class ApiClient {
 		WebResource webResource = client.resource(url);
 		ClientResponse response = webResource.header("Authorization", "JWT " + token).accept(MediaType.APPLICATION_JSON)
 				.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, data);
-
+		if (response.getStatusInfo().getStatusCode() == 403) {
+			return "Token Expired. Please log in again.";
+		}
 		if (response.getStatusInfo().getStatusCode() != 200) {
 			return "Resource Not Updated";
 		}
@@ -73,6 +79,9 @@ public class ApiClient {
 		WebResource webResource = client.resource(url);
 		ClientResponse response = webResource.header("Authorization", "JWT " + token).accept(MediaType.APPLICATION_JSON)
 				.type(MediaType.APPLICATION_JSON).delete(ClientResponse.class);
+		if (response.getStatusInfo().getStatusCode() == 403) {
+			return "Token Expired. Please log in again.";
+		}
 		if (response.getStatusInfo().getStatusCode() != 204) {
 			return "Can Not Delete Resource";
 		}
@@ -99,7 +108,9 @@ public class ApiClient {
 		}
 		response = webResource.header("Authorization", "JWT " + token).accept(MediaType.APPLICATION_JSON)
 				.type(MediaType.MULTIPART_FORM_DATA).post(ClientResponse.class, multiPart);
-		System.out.println(response.getStatusInfo().getStatusCode() );
+		if (response.getStatusInfo().getStatusCode() == 403) {
+			return "Token Expired. Please log in again.";
+		}
 		if (response.getStatusInfo().getStatusCode() != 201) {
 			return "Resources Not Created";
 		}
