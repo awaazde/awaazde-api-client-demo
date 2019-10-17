@@ -1,7 +1,7 @@
 package awaazde;
 
 public class AwaazDeAPI {
-	public final String API_BASE = "http://localhost:8000/";
+	public final String API_BASE = "https://api.awaaz.de/";
 	public final String API_VERSION = "v1";
 
 	public String username;
