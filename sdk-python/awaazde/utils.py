@@ -44,22 +44,6 @@ class ADMessageUtils(object):
         return 0
 
 
-    def construct_message_dictionary(self, template_language, phone_number, values, tags, send_on=None):
-        """
-            Using the input variables used this function will return message dictionary as expected by Awaaz De API
-        """
-        if send_on:
-            return {'templatelanguage': template_language, 'phone_number': phone_number, 'values': values,
-                    'send_on': send_on, 'tags': tags}
-        return {'templatelanguage': template_language, 'phone_number': phone_number, 'values': values, 'tags': tags}
-    def get_messages_by_id(self, filters):
-        messages = self.get_messages(filters)
-        messages_dict = {}
-        for message in messages:
-            messages_dict[message['id']] = message
-
-        return messages_dict
-
     def get_messages(self, filters):
         """
             Gets all messages from awaazde API based on the filters passed
@@ -102,6 +86,7 @@ class ADMessageUtils(object):
 
                 return calls_data
         return calls_data
+
     def schedule_ad_messages(self, messages):
         """
             Sends request to awaazde for scheduling Messages in bulk
@@ -119,23 +104,25 @@ class ADMessageUtils(object):
                 }]
         """
         messages = {'data': messages}
-        return self.awaazde_api.messages.bulk_create(messages)
+        response = self.awaazde_api.messages.bulk_create(messages)
+        print response,"++++++++"
+        return response
 
     def check_created_message(self, message_data, filter_fields):
         filters = {}
         created = []
         not_created = []
-        for filter_field,filter_value in filter_fields:
+        for filter_field, filter_value in filter_fields.items():
             filters[filter_field] = filter_value
-        filters['page'] = 10000
-        filters['fields'] = 'phone_number,id,send_on'
+        #filters['page'] = CommonConstants.AD_MESSAGE_SCHEDULE_LIMIT
+        filters['fields'] = CommonConstants.PHONE_NUMBER_FIELD, CommonConstants.ID_FIELD, CommonConstants.SEND_ON_FIELD
 
         ad_response_messages = self.get_messages(filters)
         messages_response_dict = {}
         for message in ad_response_messages:
-            messages_response_dict[message['phone_number']] = message
+            messages_response_dict[message[ CommonConstants.PHONE_NUMBER_FIELD]] = message
         for message in message_data:
-            if message.get('phone_number') in messages_response_dict:
+            if message.get( CommonConstants.PHONE_NUMBER_FIELD) in messages_response_dict:
                 created.append(message)
             else:
                 not_created.append(message)
@@ -151,3 +138,21 @@ class ADMessageUtils(object):
                             raise Exception('{} is not in the expected date format'.format(field))
             except (Exception, ValueError) as e:
                 print e.message
+
+    def process_iterable_in_chunks(self, iterable, chunk_size=CommonConstants.DEFAULT_CHUNK_SIZE):
+        '''
+        A convenience method for processing a list/queryset of objects in chunks
+        pattern stolen from https://stackoverflow.com/a/29708603/199754
+
+        :param iterable: list or queryset of objects
+        :param chunk_size: max number of objects to process in one iteration
+        :return: None
+        '''
+        offset = 0
+        chunk = iterable[offset:offset + chunk_size]
+        while chunk:
+            yield chunk  # body executes here
+
+            # increment the iterable
+            offset += chunk_size
+            chunk = iterable[offset:offset + chunk_size]

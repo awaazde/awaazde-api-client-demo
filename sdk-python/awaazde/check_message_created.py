@@ -16,7 +16,7 @@ def parseArguments():
     parser.add_argument("path", help="Path for the csv ", type=str)
     parser.add_argument("-f", "--fields", help="Filters Used for checking messages ", nargs="*", type=str,
                         default="send_on")
-    parser.add_argument("-v", "--values", help="Value for filters for checking messages ", nargs="*", type=str,
+    parser.add_argument("-v", "--values", help="Value for filters for checking messages ", type=str,
                         default=datetime.now().strftime(CommonConstants.DEFAULT_DATE_FORMAT))
     args = parser.parse_args()
     return args
