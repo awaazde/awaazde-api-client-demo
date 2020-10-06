@@ -1,3 +1,4 @@
+import csv
 from datetime import datetime
 
 from constants import CommonConstants
@@ -127,6 +128,15 @@ class ADMessageUtils(object):
             else:
                 not_created.append(message)
         return created, not_created
+
+    def drop_messages_to_file(self, message_data, file_path, file_name):
+        if message_data:
+            keys = message_data[0].keys()
+            with open('{}/{}.csv'.format(file_path, file_name),
+                      'w')  as output_file:
+                writer = csv.DictWriter(output_file, fieldnames=keys, extrasaction='ignore')
+                writer.writeheader()
+                writer.writerows(message_data)
 
     def transform_value(self, filters):
         for field, value in filters:

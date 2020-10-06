@@ -22,15 +22,6 @@ def parseArguments():
     return args
 
 
-def drop_messages_to_file(message_data, path, file_name):
-    keys = message_data[0].keys()
-    with open('{}/{}.csv'.format(path, file_name),
-              'w')  as output_file:
-        writer = csv.DictWriter(output_file, fieldnames=keys, extrasaction='ignore')
-        writer.writeheader()
-        writer.writerows(message_data)
-
-
 # Algorithm:
 # 1) Gather and Transform Filter attributes from not command
 #     (This is how the messages will get identified; so if we want to check if all messages scheduled for December 21,
@@ -59,5 +50,5 @@ if __name__ == '__main__':
     created, not_created = messages_manager.check_created_message(message_data, filters)
 
     """ Step 3"""
-    drop_messages_to_file(created, path, file_name="created_{}".format(datetime.now().timestamp()))
-    drop_messages_to_file(not_created, path, file_name="pending_{}".format(datetime.now().timestamp()))
+    messages_manager.drop_messages_to_file(created, path, file_name="created_{}".format(datetime.now().timestamp()))
+    messages_manager.drop_messages_to_file(not_created, path, file_name="pending_{}".format(datetime.now().timestamp()))
