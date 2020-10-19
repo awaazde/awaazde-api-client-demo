@@ -1,10 +1,8 @@
 import argparse
 import csv
 from datetime import datetime
-
-from constants import CommonConstants
-from utils import ADMessageUtils
-
+from awaazde.constants import CommonConstants
+from awaazde.utils import ADMessageUtils
 message_data = ''
 
 
@@ -16,7 +14,7 @@ def parseArguments():
     parser.add_argument("path", help="Path for the csv ", type=str)
     parser.add_argument("-f", "--fields", help="Filters Used for checking messages ", nargs="*", type=str,
                         default="send_on")
-    parser.add_argument("-v", "--values", help="Value for filters for checking messages ", type=str,
+    parser.add_argument("-v", "--values", help="Value for filters for checking messages ", nargs="*", type=str,
                         default=datetime.now().strftime(CommonConstants.DEFAULT_DATE_FORMAT))
     args = parser.parse_args()
     return args
@@ -43,12 +41,15 @@ if __name__ == '__main__':
     messages_manager = ADMessageUtils(organization, username, password)
 
     """ Step 1"""
+    fields = fields[0].split(',')
+    values = values[0].split(',')
     filters = {fields[i]: values[i] for i in range(len(fields))}
+    filters2 = dict(zip(fields, values))
     messages_manager.transform_value(filters)
 
     """ Step 2"""
     created, not_created = messages_manager.check_created_message(message_data, filters)
 
     """ Step 3"""
-    messages_manager.drop_messages_to_file(created, path, file_name="created_{}".format(datetime.now().timestamp()))
-    messages_manager.drop_messages_to_file(not_created, path, file_name="pending_{}".format(datetime.now().timestamp()))
+    messages_manager.create_csv_file(created, path, file_name="created_{}".format(datetime.now().timestamp()))
+    messages_manager.create_csv_file(not_created, path, file_name="pending_{}".format(datetime.now().timestamp()))

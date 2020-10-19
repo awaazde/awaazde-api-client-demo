@@ -2,7 +2,8 @@ import csv
 from datetime import datetime
 
 from constants import CommonConstants
-from sdk import AwaazDeAPI
+
+from . import AwaazDeAPI
 
 
 class ADMessageUtils(object):
@@ -12,38 +13,6 @@ class ADMessageUtils(object):
         :return:
         """
         self.awaazde_api = AwaazDeAPI(org, user, password)
-
-    @classmethod
-    def is_message_created(cls, message):
-        return message['status'].lower() == 'created'
-
-    @classmethod
-    def get_message_id(cls, message):
-        return message['id']
-
-    @classmethod
-    def get_message_error(cls, message):
-        return message['error']
-
-    @classmethod
-    def get_ad_schedule_date_time(cls, message):
-        return message['send_on']
-
-    @classmethod
-    def get_ad_status(cls, message):
-        return str(message['state']).lower().replace(' ', '_')
-
-    @classmethod
-    def get_execution_state_code_reason(cls, message):
-        return message['execution_state_reason_code']
-
-    @classmethod
-    def get_duration_seconds(cls, duration):
-        if duration and ':' in duration:
-            duration_list = duration.split(':')
-            return int(duration_list[0]) * 3600 + int(duration_list[1]) * 60 + int(duration_list[2])
-        return 0
-
 
     def get_messages(self, filters):
         """
@@ -88,7 +57,7 @@ class ADMessageUtils(object):
                 return calls_data
         return calls_data
 
-    def schedule_ad_messages(self, messages):
+    def schedule_bulk_messages(self, messages):
         """
             Sends request to awaazde for scheduling Messages in bulk
             :param messages: List of messages in the format as follows
@@ -106,7 +75,6 @@ class ADMessageUtils(object):
         """
         messages = {'data': messages}
         response = self.awaazde_api.messages.bulk_create(messages)
-        print response,"++++++++"
         return response
 
     def check_created_message(self, message_data, filter_fields):
@@ -115,31 +83,32 @@ class ADMessageUtils(object):
         not_created = []
         for filter_field, filter_value in filter_fields.items():
             filters[filter_field] = filter_value
-        #filters['page'] = CommonConstants.AD_MESSAGE_SCHEDULE_LIMIT
+
+       # filters['page'] = CommonConstants.AD_MESSAGE_SCHEDULE_LIMIT
         filters['fields'] = CommonConstants.PHONE_NUMBER_FIELD, CommonConstants.ID_FIELD, CommonConstants.SEND_ON_FIELD
 
         ad_response_messages = self.get_messages(filters)
         messages_response_dict = {}
         for message in ad_response_messages:
-            messages_response_dict[message[ CommonConstants.PHONE_NUMBER_FIELD]] = message
+            messages_response_dict[message[CommonConstants.PHONE_NUMBER_FIELD]] = message
         for message in message_data:
-            if message.get( CommonConstants.PHONE_NUMBER_FIELD) in messages_response_dict:
+            if message.get(CommonConstants.PHONE_NUMBER_FIELD) in messages_response_dict:
                 created.append(message)
             else:
                 not_created.append(message)
         return created, not_created
 
-    def drop_messages_to_file(self, message_data, file_path, file_name):
-        if message_data:
-            keys = message_data[0].keys()
+    def create_csv_file(self, data, file_path, file_name):
+        if data:
+            keys = data[0].keys()
             with open('{}/{}.csv'.format(file_path, file_name),
                       'w')  as output_file:
                 writer = csv.DictWriter(output_file, fieldnames=keys, extrasaction='ignore')
                 writer.writeheader()
-                writer.writerows(message_data)
+                writer.writerows(data)
 
     def transform_value(self, filters):
-        for field, value in filters:
+        for field, value in filters.items():
             try:
                 if field is not None:
                     if field in CommonConstants.DATE_FIELDS:

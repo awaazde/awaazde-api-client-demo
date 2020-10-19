@@ -3,6 +3,7 @@ from .apis import TemplateAPI, ContentAPI, TemplateLanguageAPI, MessageAPI
 from .exceptions import APIException
 
 API_BASE = "https://api.awaaz.de/"
+#API_BASE = "https://apiperformance.awaaz.de/"
 API_VERSION = "v1"
 
 

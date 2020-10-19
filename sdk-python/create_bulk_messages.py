@@ -1,11 +1,10 @@
 import argparse
 import os
 import uuid
-
 import pandas as pd
-
-from utils import ADMessageUtils
-from constants import CommonConstants
+from awaazde.constants import CommonConstants
+from awaazde.models import Message
+from awaazde.utils import ADMessageUtils
 
 message_data = ''
 
@@ -25,7 +24,7 @@ def pick_messages_from_file(csvFilePath):
     message_data = df.replace({pd.np.nan: None})
     headers = df.head()
     message_data = message_data.to_dict('records')
-
+    message_data = Message(message_data)
     return headers, message_data
 
 
@@ -40,7 +39,7 @@ def get_last_tag(headers):
 
 
 def schedule_calls(csv_file_path):
-    message_data = None
+    message_data = Message()
     created_messages = None
     limit = CommonConstants.AD_MESSAGE_SCHEDULE_LIMIT
     message_request_id = str(uuid.uuid1())
@@ -48,20 +47,21 @@ def schedule_calls(csv_file_path):
 
     try:
         headers, message_data = pick_messages_from_file(csv_file_path)
+        print message_data
         tag = get_last_tag(headers)
         for item in message_data:
             item.update({tag: message_request_id})
-        for chunk in messages_manager.process_iterable_in_chunks(message_data, limit):
-            created_messages = messages_manager.schedule_ad_messages(chunk)
+        #for chunk in messages_manager.process_iterable_in_chunks(message_data, limit):
+            #created_messages = messages_manager.schedule_bulk_messages(chunk)
     except Exception as e:
         print "Error occurred: " + str(e)
 
     if created_messages:
-        messages_manager.drop_messages_to_file(created_messages, file_path, file_name="created")
+        messages_manager.create_csv_file(created_messages, file_path, file_name="created")
     else:
         created, not_created = messages_manager.check_created_message(message_data, {"tags": message_request_id})
-        messages_manager.drop_messages_to_file(created, file_path, file_name="created")
-        messages_manager.drop_messages_to_file(not_created, file_path, file_name="pending")
+        messages_manager.create_csv_file(created, file_path, file_name="created")
+        messages_manager.create_csv_file(not_created, file_path, file_name="pending")
 
 
 if __name__ == '__main__':
