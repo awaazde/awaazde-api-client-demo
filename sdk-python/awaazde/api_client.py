@@ -55,6 +55,5 @@ class ApiClient(object):
             status_code = result.status_code
         except Exception as e:
             # catching all exception
-            print e
             raise APIException(content)
         return self._resource.from_json(content) if content and status_code != 204 else True
