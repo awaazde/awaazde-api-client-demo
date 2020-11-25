@@ -1,17 +1,20 @@
 import argparse
 import os
 import uuid
-from awaazde.constants import CommonConstants
-from awaazde.utils import ADUtils, CSVUtils, CommonUtils
+from awaazde.constants import CommonConstants, APIConstants
+from awaazde.utils import APIUtils, CSVUtils
 import logging
+from awaazde import AwaazDeAPI
 
 
-def parseArguments():
+def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("username", help="Username", type=str)
     parser.add_argument("password", help="Password", type=str)
     parser.add_argument("organization", help="Organization ", type=str)
     parser.add_argument("csv_file_path", help="Path for the csv ", type=str)
+    parser.add_argument('--use_custom_format', type=bool, default=False,
+                        help="Set this as True if the messages are of a custom Xact Template")
     args = parser.parse_args()
     return args
 
@@ -32,57 +35,70 @@ def get_next_tag(headers):
         return CommonConstants.TAGS_FIELD
 
 
-def schedule_calls(csv_file_path):
+def create_bulk_messages(headers, message_data, file_path):
     """
-    :param csv_file_path: Path to the csv file where messages to be sent are present
-    :type csv_file_path: String
+    :param headers: Headers of the data
+    :type headers: List
+    :param message_data: Message data eg: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",template:23,language:"hi"}]
+    :type message_data: List of dict
+    :param file_path: Path to the folder where the file with created/pending messages are to be kept
+    :type file_path: String
     :return: Creates another csv_files in the folder where the csv file was present
             with created and not created messages
     """
-    ad_manager = ADUtils(organization, username, password)
-    created_messages = None
-    limit = CommonConstants.AD_MESSAGE_SCHEDULE_LIMIT
     message_request_id = str(uuid.uuid1())
-    file_path = os.path.dirname(csv_file_path)
+    ad_manager = APIUtils()
     try:
         """
-        Step 1: Get Messages from CSV file
-        """
-        headers, message_data = CSVUtils.parse_csv(csv_file_path)
-
-        """
-        Step 2:  Mark the messages sent in this particular request with a unique request
-                 is as the next tag, use this later to check the status of the messages.
+        Step 1:  Mark the messages sent in this particular request with a unique request
+                 is as the next tag,can use this later to check the status of the messages.
         """
         tag = get_next_tag(headers)
         for item in message_data:
             item.update({tag: message_request_id})
         """
-        Step 3: Schedule messages in chunks
+        Step 2: Schedule messages and  Create file for created messages and pending messages if any 
         """
-        ad_manager.bulk_create_in_chunks(message_data, limit)
-        scheduling_completed = True
+        kwargs = {'limit': args.limit, 'use_custom_format': args.transform_with_template}
+        created_messages = ad_manager.create_bulk_in_chunks(awaazde_api.messages, message_data, **kwargs)
+        CSVUtils.write_csv(created_messages, file_path, file_name="created")
 
     except Exception as e:
-        scheduling_completed = False
         logging.error("Error occurred trying to schedule calls : {}".format(e))
+        logging.error("Creating Files for created and pending messages")
+        params = {"tags": message_request_id, 'page': APIConstants.DEFAULT_BULK_CREATE_LIMIT, 'fields': (
+            CommonConstants.PHONE_NUMBER_FIELD, CommonConstants.ID_FIELD, CommonConstants.SEND_ON_FIELD)}
 
-        """
-        Step 4: Create file for created messages and pending messages if any.
-        """
-    if scheduling_completed:
-        CSVUtils.create_csv(created_messages, file_path, file_name="created")
-    else:
-        created, not_created = ad_manager.check_created_message(message_data, {"tags": message_request_id})
-        CSVUtils.create_csv(created, file_path, file_name="created")
-        CSVUtils.create_csv(not_created, file_path, file_name="pending")
+        responses = ad_manager.list_depaginated(awaazde_api.messages, params)
+        response_dict = {[response[CommonConstants.PHONE_NUMBER_FIELD]] for response in responses}
+        filtered, remainder = [], []
+        for idx, datum in enumerate(message_data):
+            response = filtered if datum.get(CommonConstants.PHONE_NUMBER_FIELD) in response_dict else remainder
+            response.append(idx)
+
+        CSVUtils.write_csv(filtered, file_path, file_name="created")
+        CSVUtils.write_csv(remainder, file_path, file_name="pending")
 
 
 if __name__ == '__main__':
     # Parse the arguments
-    args = parseArguments()
+    args = parse_arguments()
     username = args.__dict__['username']
     password = args.__dict__['password']
     organization = args.__dict__['organization']
     csv_file_path = args.__dict__['csv_file_path']
-    schedule_calls(csv_file_path)
+    transform_using_template = args.__dict__['transform_using_template']
+    api_manager = APIUtils()
+    awaazde_api = AwaazDeAPI(args.organization, args.username, args.password)
+
+    """
+    Step 1: Get Messages from CSV file
+    """
+    file_path = os.path.dirname(csv_file_path)
+    headers, message_data = CSVUtils.read_csv(csv_file_path)
+
+    """
+    Step 2: Create bulk Messages
+    """
+    created_messages = None
+    create_bulk_messages(headers, message_data, file_path)

@@ -82,10 +82,11 @@ class MessageAPI(BaseAPI):
 
         return self._client.post(upload_url, **data)
 
-    def create_bulk(self, data):
+    def create_bulk(self, data, **kwargs):
         """
         This will create new object
         """
         bulk_url = self.url + "create_bulk/"
-        data = {'json': data}
-        return self._client.post(bulk_url, **self._append_headers(data))
+        data = {'data': data, 'headers': self._append_headers(data),
+                'transform_using_template': kwargs.get('transform_using_template')}
+        return self._client.post(bulk_url, **data)
