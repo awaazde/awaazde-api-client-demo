@@ -1,50 +1,6 @@
 import csv
-import logging
-import urlparse
-
 import pandas as pd
-from constants import CommonConstants, APIConstants
-
-
-class APIUtils(object):
-
-    def list_depaginated(self, api, params=None):
-        """
-            Gets all messages from awaazde API based on the filters passed
-        """
-        data = []
-        response = api.list(params=params)
-        while response.get('next') is not None:
-            # Get next page URL
-            next_page_url = response['next']
-            params['page'] = urlparse.parse_qs(urlparse.urlparse(next_page_url).query)['page'][0]
-            # And then we request for the data on the next page
-            response = api.list(params=params)
-
-        if response:
-            data.extend(response['results'])
-        else:
-            logging.error("Error in Fetching Results")
-
-        return data
-
-    def create_bulk_in_chunks(self, api, data, **kwargs):
-        """
-        Create messages in chunks based on limit if present, takes DEFAULT_BULK_CREATE_LIMIT as default.
-        :param api:
-        :type api:
-        :param Data: Data to create. eg: if messages: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",templatelanguage:23,language:"hi"}]
-        :type Data: List of dict
-        :param limit: Number of messages to create in one chunked request
-        :type limit: integer
-        :return: Response from bulk create api
-        :rtype: List of dict [{phone_number:8929292929,send_on:"",tag1:"tag_number1",templatelanguage:23,language:"hi",status:"created"}}
-        """
-        limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
-        response = []
-        for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
-            response += api.create_bulk(data_chunk, **kwargs)
-        return response
+from constants import CommonConstants
 
 
 class CommonUtils(object):

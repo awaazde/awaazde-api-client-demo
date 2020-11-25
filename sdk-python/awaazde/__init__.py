@@ -1,13 +1,12 @@
 from .api_client import ApiClient
 from .apis import TemplateAPI, ContentAPI, TemplateLanguageAPI, MessageAPI
-from .exceptions import APIException
 
-API_BASE = "https://api.awaaz.de/"
-#API_BASE = "https://apiperformance.awaaz.de/"
+# API_BASE = "https://api.awaaz.de/"
+API_BASE = "http://localhost:8000/"
 API_VERSION = "v1"
 
 
-class AwaazDeAPI(object):
+class AwaazDeAPI(ApiClient):
     username = None
     password = None
     organization = None
