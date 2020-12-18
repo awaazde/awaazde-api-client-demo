@@ -1,6 +1,11 @@
+import logging
+import urlparse
+
 from .base import BaseAPI
-from .resource import Template, TemplateLanguage, Message, Content
+from .constants import APIConstants
 from .exceptions import APIException
+from .resource import Template, TemplateLanguage, Message, Content
+from .utils import CommonUtils
 
 
 class ContentAPI(BaseAPI):
@@ -87,6 +92,42 @@ class MessageAPI(BaseAPI):
         This will create new object
         """
         bulk_url = self.url + "create_bulk/"
-        data = {'data': data, 'headers': self._append_headers(data),
-                'transform_using_template': kwargs.get('transform_using_template')}
+        data = self._append_headers(data)
         return self._client.post(bulk_url, **data)
+
+    def create_bulk_in_chunks(self, data, **kwargs):
+        """
+        Create messages in chunks based on limit if present, takes DEFAULT_BULK_CREATE_LIMIT as default.
+        :param api:
+        :type api:
+        :param Data: Data to create. eg: if messages: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",templatelanguage:23,language:"hi"}]
+        :type Data: List of dict
+        :param limit: Number of messages to create in one chunked request
+        :type limit: integer
+        :return: Response from bulk create api
+        :rtype: List of dict [{phone_number:8929292929,send_on:"",tag1:"tag_number1",templatelanguage:23,language:"hi",status:"created"}}
+        """
+        limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
+        response = []
+        for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
+            data = {"json": data_chunk}
+            response += self.create_bulk(data, **kwargs)
+        return response
+
+    def list_depaginated(self, params=None):
+        """
+            Gets all messages from awaazde API based on the filters passed
+        """
+        data = []
+        response = self.list(params=params)
+        while response.get('next') is not None:
+            # Get next page URL
+            next_page_url = response['next']
+            params['page'] = urlparse.parse_qs(urlparse.urlparse(next_page_url).query)['page'][0]
+            # And then we request for the data on the next page
+            response = self.list(params=params)
+
+        if response:
+            data.extend(response['results'])
+        else:
+            logging.error("Error in Fetching Results")

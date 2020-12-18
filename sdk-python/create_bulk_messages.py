@@ -1,10 +1,11 @@
 import argparse
+import logging
 import os
 import uuid
-from awaazde.constants import CommonConstants, APIConstants
-from awaazde.utils import CSVUtils
-import logging
+
 from awaazde import AwaazDeAPI
+from awaazde.constants import CommonConstants
+from awaazde.utils import CSVUtils
 
 
 def parse_arguments():
@@ -58,18 +59,17 @@ def create_bulk_messages(headers, message_data, file_path, **kwargs):
         """
         Step 2: Schedule messages and create file for created messages and pending messages if any 
         """
-        created_messages = awaazde_api.create_bulk_in_chunks(awaazde_api.messages, message_data, **kwargs)
+        awaazde_api = AwaazDeAPI(args.organization, args.username, args.password)
+        created_messages = awaazde_api.messages.create_bulk_in_chunks(message_data, **kwargs)
         CSVUtils.write_csv(created_messages, file_path, file_name="created")
 
     except Exception as e:
-        logging.error(
-            "Error occurred trying to schedule calls:{} with message_request_id:{}".format(e, message_request_id))
+        logging.error("Error occurred trying to schedule calls:{} with message_request_id:{}".format(e, message_request_id))
 
 
 if __name__ == '__main__':
     # Parse the arguments
     args = parse_arguments()
-    awaazde_api = AwaazDeAPI(args.organization, args.username, args.password)
     """
     Step 1: Get Messages from CSV file
     """
@@ -79,5 +79,5 @@ if __name__ == '__main__':
     Step 2: Create bulk Messages
     """
     created_messages = None
-    kwargs = {'use_custom_format': args.use_custom_format}
+    kwargs = {'transform_using_template': args.use_custom_format}
     create_bulk_messages(headers, message_data, file_path, **kwargs)
