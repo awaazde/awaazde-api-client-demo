@@ -10,7 +10,7 @@ def parse_arguments():
     parser.add_argument('username', type=str, help='Username of the tenant')
     parser.add_argument('password', type=str, help='Password of the tenant')
     parser.add_argument('organization', type=str, help='Organization of the tenant')
-    parser.add_argument('path', type=str, help='Path for the csv')
+    parser.add_argument('match_path', type=str, help='Path for the csv with which filtered data is to be matched')
     parser.add_argument('--params', type=str,
                         help='Fields on which filters are to be applied in the form: {"send_on__gt":"10-12-2020",'
                              '"send_on__lt":"10-12-2020","tags":"dummy_tag"}')
@@ -26,7 +26,7 @@ if __name__ == '__main__':
         Step 1 : Parse the arguments
     """
     args = parse_arguments()
-    headers, message_data = CSVUtils.read_csv(args.path)
+    headers, message_data = CSVUtils.read_csv(args.match_path)
     awaazde_api = AwaazDeAPI(args.organization, args.username, args.password)
 
     """
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     params["tags"] = CommonConstants.PHONE_NUMBER_FIELD
     params['page'] = APIConstants.DEFAULT_BULK_CREATE_LIMIT
     params['fields'] = CommonConstants.PHONE_NUMBER_FIELD, CommonConstants.ID_FIELD, CommonConstants.SEND_ON_FIELD
-    responses = awaazde_api.list_depaginated(awaazde_api.messages, params)
+    responses = awaazde_api.messages.list_depaginated(params)
     response_dict = {[response[CommonConstants.PHONE_NUMBER_FIELD]] for response in responses}
 
     """
