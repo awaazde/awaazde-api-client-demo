@@ -3,8 +3,6 @@ class CommonConstants():
     MESSAGE_ID = "message_id"
     ID_FIELD = "id"
     SEND_ON_FIELD = "send_on"
-    TAG_FIELD = "tag"
-    TAGS_FIELD = "tags"
     DEFAULT_CHUNK_SIZE = 10000
 
 

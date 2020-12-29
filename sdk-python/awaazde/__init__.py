@@ -1,7 +1,6 @@
 from .apis import TemplateAPI, ContentAPI, TemplateLanguageAPI, MessageAPI
 
 API_BASE = "https://api.awaaz.de/"
-#API_BASE = "http://localhost:8000/"
 API_VERSION = "v1"
 
 

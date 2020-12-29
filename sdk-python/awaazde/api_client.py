@@ -1,5 +1,4 @@
 import requests
-from requests.auth import HTTPBasicAuth
 
 from .exceptions import APIException
 from .resource import APIResource
@@ -53,7 +52,7 @@ class ApiClient(object):
             content = result.content
             result.raise_for_status()
             status_code = result.status_code
-        except Exception as e:
+        except Exception:
             # catching all exception
             raise APIException(content)
         return self._resource.from_json(content) if content and status_code != 204 else True
