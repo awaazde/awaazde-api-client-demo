@@ -12,12 +12,10 @@ def parse_arguments():
     parser.add_argument('password', type=str, help='Password of the tenant')
     parser.add_argument('organization', type=str, help='Organization of the tenant')
     parser.add_argument('match_path', type=str, help='Path for the csv with which filtered data is to be matched')
-    parser.add_argument("--params",
-                        nargs='+',
-                        help="Fields on which filters are to be applied."
-                             "Set a number of key-value pairs with double-quotes "
-                             "(do not put spaces before or after the = sign)."
-                             "Example: --params send_on__gt=10-12-2020 tags=dummy_tag ")
+    parser.add_argument("--params", nargs='+', help="Fields on which filters are to be applied."
+                                                    "Set a number of key-value pairs within double-quotes "
+                                                    "(do not put spaces before or after the = sign)."
+                                                    "Example: --params 'send_on__gt'='10-12-2020' 'tags'='dummy_tag' ")
     parser.add_argument('--match_criteria', type=str,
                         help='Field to use when matching User record with the queried resultant record',
                         default=CommonConstants.MESSAGE_ID)

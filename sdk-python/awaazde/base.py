@@ -1,8 +1,9 @@
 import logging
 import urlparse
-from .exceptions import APIException
+
 from .api_client import ApiClient
 from .constants import APIConstants
+from .exceptions import APIException
 from .utils import CommonUtils
 
 
@@ -120,8 +121,8 @@ class BaseAPI(object):
         This will create new object
         """
         bulk_url = self.url + "create_bulk/"
-        data = self._append_headers(data)
-        return self._client.post(bulk_url, **data)
+        data = {'json': data}
+        return self._client.post(bulk_url, **self._append_headers(data))
 
     def create_bulk_in_chunks(self, data, **kwargs):
         """
@@ -136,8 +137,7 @@ class BaseAPI(object):
         limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
         response = []
         for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
-            data = {"json": data_chunk}
-            response += self.create_bulk(data)
+            response += self.create_bulk(data_chunk)
         return response
 
     def list_depaginated(self, params=None):
