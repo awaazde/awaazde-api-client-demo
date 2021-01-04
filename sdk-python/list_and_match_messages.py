@@ -22,24 +22,6 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def parse_vars(extra_vars):
-    """
-    Take a list of comma separated key value pair strings, separated
-    by comma strings like 'foo=bar' and return as dict.
-    :param extra_vars: list[str] ['foo=bar, 'key2=value2']
-    :return: dict[str, str] {'foo': 'bar', 'key2': 'value2'}
-    """
-    vars_list = []
-    if extra_vars:
-        for i in extra_vars:
-            items = i.split('=')
-            key = items[0].strip()
-            if len(items) > 1:
-                value = '='.join(items[1:])
-                vars_list.append((key, value))
-    return dict(vars_list)
-
-
 if __name__ == '__main__':
     """
         Step 1 : Parse the arguments
@@ -53,7 +35,7 @@ if __name__ == '__main__':
     """
     params = {'page': APIConstants.DEFAULT_BULK_CREATE_LIMIT,
               'fields': (CommonConstants.PHONE_NUMBER_FIELD, CommonConstants.ID_FIELD, CommonConstants.SEND_ON_FIELD),
-              "filters": parse_vars(args.params)}
+              "filters": dict(map(str.strip, s.split('=')) for s in args.params)}
     messages_from_api = awaazde_api.messages.list_depaginated(params)
     match_criteria = args.match_criteria
 
