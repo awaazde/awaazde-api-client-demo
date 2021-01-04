@@ -11,7 +11,7 @@ def parse_arguments():
     parser.add_argument("username", help="Username", type=str)
     parser.add_argument("password", help="Password", type=str)
     parser.add_argument("organization", help="Organization ", type=str)
-    parser.add_argument("matching_messages_file_path",
+    parser.add_argument("messages_file_path",
                         help="Path for the csv with messages against which we want to check created messages", type=str)
     parser.add_argument('--use_custom_format', action="store_true",
                         help="Include this flag if the messages are of a custom Xact Template")

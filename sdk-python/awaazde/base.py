@@ -116,13 +116,7 @@ class BaseAPI(object):
         data['headers'] = headers
         return data
 
-    def create_bulk(self, data):
-        """
-        This will create new object
-        """
-        bulk_url = self.url + "create_bulk/"
-        data = {'json': data}
-        return self._client.post(bulk_url, **self._append_headers(data))
+
 
     def create_bulk_in_chunks(self, data, **kwargs):
         """
