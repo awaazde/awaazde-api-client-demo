@@ -31,17 +31,17 @@ if __name__ == '__main__':
     awaazde_api = AwaazDeAPI(args.organization, args.username, args.password)
 
     """
-        Step 2 : Send an api request to  Get List of Messages based on filters
+        Step 2 : Send an api request to get list of messages based on filters
     """
     params = {'page': APIConstants.DEFAULT_BULK_CREATE_LIMIT,
               'fields': (CommonConstants.PHONE_NUMBER_FIELD, CommonConstants.ID_FIELD, CommonConstants.SEND_ON_FIELD),
               "filters": dict(map(str.strip, s.split('=')) for s in args.params)}
     messages_from_api = awaazde_api.messages.list_depaginated(params)
-    match_criteria = args.match_criteria
 
     """
         Step 3:  Match Messages from the api and from user's csv based on filters
     """
+    match_criteria = args.match_criteria
     # Get a list of all messages,present in user's messages as well as in messages from api after filtering
     matched = [i for i in message_data for j in messages_from_api if i[match_criteria] == j[match_criteria]]
     # Get a list of all messages, present in user's messages,for which we did not find a match in the api's response
@@ -51,4 +51,4 @@ if __name__ == '__main__':
         Step 4:  Dump the data in a file for the user
     """
     CSVUtils.write_csv(matched, args.path, file_name="matched_{}".format(datetime.now().timestamp()))
-    CSVUtils.write_csv(unmatched, args.path, file_name="non_matched_{}".format(datetime.now().timestamp()))
+    CSVUtils.write_csv(unmatched, args.path, file_name="unmatched_{}".format(datetime.now().timestamp()))
