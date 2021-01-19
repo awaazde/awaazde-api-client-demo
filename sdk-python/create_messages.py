@@ -18,14 +18,12 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def create_messages(message_data, file_path, **kwargs):
+def create_messages(message_data, **kwargs):
     """
     :param message_data: Message data eg: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",template:23,language:"hi"}]
     :type message_data: List of dict
-    :param file_path: Path to the folder where the file with created/pending messages are to be kept
-    :type file_path: String
-    :return: Creates another csv_files in the folder where the csv file was present
-            with created and not created messages
+    :return: created messages from the message data.
+    :type created_messages: List of dict
     """
     try:
         """
@@ -33,8 +31,7 @@ def create_messages(message_data, file_path, **kwargs):
         """
         awaazde_api = AwaazDeAPI(args.organization, args.username, args.password)
         created_messages = awaazde_api.messages.create_bulk_in_chunks(message_data, **kwargs)
-        CSVUtils.write_csv(created_messages, file_path, file_name="created")
-
+        return created_messages
     except Exception as e:
         print e
         logging.error("Error occurred trying to schedule calls:{} ".format(e))
@@ -51,6 +48,9 @@ if __name__ == '__main__':
     """
     Step 2: Create bulk Messages
     """
-    created_messages = None
     kwargs = {'transform_using_template': args.use_custom_format}
-    create_messages(message_data, file_path, **kwargs)
+    created_messages = create_messages(message_data, **kwargs)
+    """
+    Step 3: Write created messages to csv
+    """
+    CSVUtils.write_csv(created_messages, file_path, file_name="created")
