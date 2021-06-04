@@ -2,8 +2,8 @@ import argparse
 import logging
 import os
 
-from awaazde import AwaazDeAPI
-from awaazde.utils import CSVUtils
+from .awaazde import AwaazDeAPI
+from .awaazde.utils import CSVUtils
 
 
 def parse_arguments():
@@ -33,7 +33,7 @@ def create_messages(message_data, **kwargs):
         created_messages = awaazde_api.messages.create_bulk_in_chunks(message_data, **kwargs)
         return created_messages
     except Exception as e:
-        print e
+        print(e)
         logging.error("Error occurred trying to schedule calls:{} ".format(e))
 
 

@@ -1,4 +1,5 @@
-from awaazde import AwaazDeAPI, APIException
+from .awaazde import AwaazDeAPI
+from .awaazde.exceptions import APIException
 
 username = 'nikhil@awaaz.de'
 password = 'your password'
@@ -11,10 +12,10 @@ def demo_template_api():
     # Template API
     """
     # list down all templates
-    print awaazde.templates.list()
+    print(awaazde.templates.list())
 
     # get specific template
-    print awaazde.templates.get(1)  # 1 is the id of template
+    print(awaazde.templates.get(1))  # 1 is the id of template
 
     # create new template
     # advance options
@@ -32,9 +33,9 @@ def demo_template_api():
         "advanced_options": advanced_options
     }
     try:
-        print awaazde.templates.create(new_template)
+        print(awaazde.templates.create(new_template))
     except APIException as e:
-        print e
+        print(e)
 
     # try to update template
     update_template = {
@@ -42,21 +43,21 @@ def demo_template_api():
         "description": "This template is for sending welcome calls to beneficiaries"
     }
     try:
-        print awaazde.templates.update(1, update_template)
+        print(awaazde.templates.update(1, update_template))
     except APIException as e:
-        print e
+        print(e)
 
     # delete template
     try:
-        print awaazde.templates.delete(1)
+        print(awaazde.templates.delete(1))
     except APIException as e:
-        print e
+        print(e)
 
     # get template reports
-    print awaazde.templates.get_reports(1)
+    print(awaazde.templates.get_reports(1))
 
     # get template statistics
-    print awaazde.templates.get_statistics(1)
+    print(awaazde.templates.get_statistics(1))
 
 
 def demo_content_api():
@@ -64,10 +65,10 @@ def demo_content_api():
     # Content API
     """
     # list down all contents
-    print awaazde.contents.list()
+    print(awaazde.contents.list())
 
     # get specific content
-    print awaazde.contents.get(1)  # 1 is the id of content
+    print(awaazde.contents.get(1))  # 1 is the id of content
 
     # create new content
     new_content = {
@@ -76,9 +77,9 @@ def demo_content_api():
         'file': '1.wav'
     }
     try:
-        print awaazde.contents.create(new_content)
+        print(awaazde.contents.create(new_content))
     except APIException as e:
-        print "Error occurred: " + str(e)
+        print("Error occurred: " + str(e))
 
     # try to update content
     content = {
@@ -86,15 +87,15 @@ def demo_content_api():
         "description": "content file"
     }
     try:
-        print awaazde.contents.update(1, content)
+        print(awaazde.contents.update(1, content))
     except APIException as e:
-        print "Error occurred: " + str(e)
+        print("Error occurred: " + str(e))
 
     # delete content
     try:
-        print awaazde.contents.delete(1)
+        print(awaazde.contents.delete(1))
     except APIException as e:
-        print "Error occurred: " + str(e)
+        print("Error occurred: " + str(e))
 
 
 def demo_template_language_api():
@@ -102,10 +103,10 @@ def demo_template_language_api():
     # Template language API
     """
     # list down all languages
-    print awaazde.template_languages.list()
+    print(awaazde.template_languages.list())
 
     # get specific language
-    print awaazde.template_languages.get(1)  # 1 is the id of language
+    print(awaazde.template_languages.get(1))  # 1 is the id of language
 
     # create new language
     language = {
@@ -115,9 +116,9 @@ def demo_template_language_api():
         'content': [{'id': 24}, {'id': 25}, {'id': 26}]
     }
     try:
-        print awaazde.template_languages.create(language)
+        print(awaazde.template_languages.create(language))
     except APIException as e:
-        print "Error occurred: " + str(e)
+        print("Error occurred: " + str(e))
 
     # update language
     language = {
@@ -125,15 +126,15 @@ def demo_template_language_api():
         'language': 'en'
     }
     try:
-        print awaazde.template_languages.update(2, language)
+        print(awaazde.template_languages.update(2, language))
     except APIException as e:
-        print "Error occurred: " + str(e)
+        print("Error occurred: " + str(e))
 
     # delete language
     try:
-        print awaazde.template_languages.delete(2)
+        print(awaazde.template_languages.delete(2))
     except APIException as e:
-        print "Error occurred: " + str(e)
+        print("Error occurred: " + str(e))
 
 
 def demo_message_api():
@@ -141,16 +142,16 @@ def demo_message_api():
     # Message API
     """
     # list down all messages
-    print awaazde.messages.list()
+    print(awaazde.messages.list())
 
     # search messages - by language
-    print awaazde.messages.list(templatelanguage=1)
+    print(awaazde.messages.list(templatelanguage=1))
 
     # search messages - by recipient_phone_number
-    print awaazde.messages.list(recipient_phone_number="+918888888888")
+    print(awaazde.messages.list(recipient_phone_number="+918888888888"))
 
     # get specific message
-    print awaazde.messages.get(1)  # 1 is the id of message
+    print(awaazde.messages.get(1))  # 1 is the id of message
 
     # create new message
     message = {
@@ -160,9 +161,9 @@ def demo_message_api():
         'tags': ['ad']
     }
     try:
-        print awaazde.messages.create(message)
+        print(awaazde.messages.create(message))
     except APIException as e:
-        print "Error occurred: " + str(e)
+        print("Error occurred: " + str(e))
 
     # update message
     message = {
@@ -171,15 +172,15 @@ def demo_message_api():
         'tags': ['ad2']
     }
     try:
-        print awaazde.messages.update(9, message)
+        print(awaazde.messages.update(9, message))
     except APIException as e:
-        print "Error occurred: " + str(e)
+        print("Error occurred: " + str(e))
 
     # delete message
     try:
-        print awaazde.messages.delete(9)
+        print(awaazde.messages.delete(9))
     except APIException as e:
-        print "Error occurred: " + str(e)
+        print("Error occurred: " + str(e))
 
 
 def demo_message_upload_api():
@@ -187,7 +188,7 @@ def demo_message_upload_api():
     # Message API Upload
     """
     # upload messages
-    print awaazde.messages.upload('/home/nikhil/Desktop/sample_messages.csv')
+    print(awaazde.messages.upload('/home/nikhil/Desktop/sample_messages.csv'))
 
 
 if __name__ == "__main__":
