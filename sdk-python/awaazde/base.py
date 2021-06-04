@@ -1,5 +1,5 @@
 import logging
-import urlparse
+import urllib.parse
 
 from .api_client import ApiClient
 from .constants import APIConstants
@@ -143,7 +143,7 @@ class BaseAPI(object):
         while response.get('next') is not None:
             # Get next page URL
             next_page_url = response['next']
-            params['page'] = urlparse.parse_qs(urlparse.urlparse(next_page_url).query)['page'][0]
+            params['page'] = urllib.parse.parse_qs(urllib.parse.urlparse(next_page_url).query)['page'][0]
             # And then we request for the data on the next page
             response = self.list(params=params)
 

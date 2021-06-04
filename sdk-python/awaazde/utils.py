@@ -2,7 +2,7 @@ import csv
 
 import pandas as pd
 
-from constants import CommonConstants
+from .constants import CommonConstants
 
 
 class CommonUtils(object):
@@ -31,7 +31,7 @@ class CSVUtils(object):
     @staticmethod
     def write_csv(data, file_path, file_name):
         if data:
-            keys = data[0].keys()
+            keys = list(data[0].keys())
             with open('{}/{}.csv'.format(file_path, file_name),
                       'w')  as output_file:
                 writer = csv.DictWriter(output_file, fieldnames=keys, extrasaction='ignore')
