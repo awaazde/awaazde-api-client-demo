@@ -2,8 +2,8 @@ import argparse
 import logging
 import os
 
-from .awaazde import AwaazDeAPI
-from .awaazde.utils import CSVUtils
+from awaazde import AwaazDeAPI
+from awaazde.utils import CSVUtils
 
 
 def parse_arguments():
@@ -43,8 +43,8 @@ if __name__ == '__main__':
     """
     Step 1: Get Messages from CSV file
     """
-    file_path = os.path.dirname(args.matching_messages_file_path)
-    headers, message_data = CSVUtils.read_csv(args.matching_messages_file_path)
+    file_path = os.path.dirname(args.messages_file_path)
+    headers, message_data = CSVUtils.read_csv(args.messages_file_path)
     """
     Step 2: Create bulk Messages
     """

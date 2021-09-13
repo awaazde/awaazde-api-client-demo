@@ -46,7 +46,7 @@ class BaseAPI(object):
         """
         data = {}
         if kwargs:
-            data = {'params': kwargs}
+            data = {'params': kwargs.pop('params')}
         return self._client.get(self.url, **self._append_headers(data))
 
     def create(self, data):
@@ -116,8 +116,6 @@ class BaseAPI(object):
         data['headers'] = headers
         return data
 
-
-
     def create_bulk_in_chunks(self, data, **kwargs):
         """
         Create objects in chunks based on limit if present, takes DEFAULT_BULK_CREATE_LIMIT as default.
@@ -131,7 +129,7 @@ class BaseAPI(object):
         limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
         response = []
         for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
-            response += self.create_bulk(data_chunk)
+            response += self.create_bulk(data_chunk, **kwargs)
         return response
 
     def list_depaginated(self, params=None):

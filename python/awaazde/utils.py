@@ -39,8 +39,8 @@ class CSVUtils(object):
                 writer.writerows(data)
 
     @staticmethod
-    def read_csv(csv_file_path):
-        df = pd.read_csv(csv_file_path)
+    def read_csv(csv_file_path, replace_null=False):
+        df = pd.read_csv(csv_file_path, na_filter=replace_null)
         headers = df.head()
         data = df.to_dict('records')
         return headers, data
