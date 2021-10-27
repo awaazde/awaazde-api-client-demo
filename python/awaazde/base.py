@@ -44,9 +44,7 @@ class BaseAPI(object):
         """
         This will return list of resources.
         """
-        data = {}
-        if kwargs:
-            data = {'params': kwargs.pop('params')}
+        data = {'params': kwargs}
         return self._client.get(self.url, **self._append_headers(data))
 
     def create(self, data):
@@ -137,6 +135,7 @@ class BaseAPI(object):
             Gets all messages from awaazde API based on the filters passed
         """
         data = []
+        print(params)
         response = self.list(params=params)
         while response.get('next') is not None:
             # Get next page URL

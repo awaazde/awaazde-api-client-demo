@@ -54,3 +54,4 @@ if __name__ == '__main__':
     Step 3: Write created messages to csv
     """
     CSVUtils.write_csv(created_messages, file_path, file_name="created")
+    logging.info("Completed")

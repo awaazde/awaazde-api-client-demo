@@ -40,6 +40,11 @@ class CSVUtils(object):
 
     @staticmethod
     def read_csv(csv_file_path, replace_null=False):
+        """
+        replace_null: If set to True: all  null values in csv will be replaced by ("NA","NaN","None" etc).
+                      If set to False: Null values will remain blank. (In cases like "send_on" date,
+                      we want it blank,so default for this function w.r.t the usage of this sdk has been kept as false)
+        """
         df = pd.read_csv(csv_file_path, na_filter=replace_null)
         headers = df.head()
         data = df.to_dict('records')

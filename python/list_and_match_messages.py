@@ -44,7 +44,8 @@ if __name__ == '__main__':
         [CommonConstants.PHONE_NUMBER_FIELD, CommonConstants.ID_FIELD, CommonConstants.SEND_ON_FIELD]),
     }
     filters = dict(list(map(str.strip, s.split('='))) for s in args.params)
-    params = params.update(filters)
+    params.update(filters)
+
     messages_from_api = awaazde_api.messages.list_depaginated(params)
 
     """

@@ -87,7 +87,9 @@ class MessageAPI(BaseAPI):
         This will create new object
         """
         bulk_url = self.url + "create_bulk/"
+        # We need to pop send "transform_using_template" as a separate parameter other than "data"
+        # because the api expects it to be a separate parameter,
         transform_using_template = kwargs.pop('transform_using_template')
-        data = {'data': data, 'transform_using_template': transform_using_template}
-        data = {'json': data}
+        params = {'data': data, 'transform_using_template': transform_using_template}
+        params = {'json': params}
         return self._client.post(bulk_url, **self._append_headers(data))
