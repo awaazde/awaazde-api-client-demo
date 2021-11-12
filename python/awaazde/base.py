@@ -114,7 +114,7 @@ class BaseAPI(object):
         data['headers'] = headers
         return data
 
-    def create_bulk_in_chunks(self, data, **kwargs):
+    def create_bulk_in_chunks(self, data, transform_using_template=False, **kwargs):
         """
         Create objects in chunks based on limit if present, takes DEFAULT_BULK_CREATE_LIMIT as default.
         :param Data: Data to create. eg: if messages: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",templatelanguage:23,language:"hi"}]
@@ -127,7 +127,7 @@ class BaseAPI(object):
         limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
         response = []
         for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
-            response += self.create_bulk(data_chunk, **kwargs)
+            response += self.create_bulk(data_chunk, transform_using_template, **kwargs)
         return response
 
     def list_depaginated(self, params=None):
@@ -135,7 +135,6 @@ class BaseAPI(object):
             Gets all messages from awaazde API based on the filters passed
         """
         data = []
-        print(params)
         response = self.list(params=params)
         while response.get('next') is not None:
             # Get next page URL

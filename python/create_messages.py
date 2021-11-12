@@ -4,6 +4,7 @@ import os
 
 from awaazde import AwaazDeAPI
 from awaazde.utils import CSVUtils
+from python.awaazde.constants import APIConstants
 
 
 def parse_arguments():
@@ -18,7 +19,7 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def create_messages(message_data, **kwargs):
+def create_messages(message_data, transform_using_template, **kwargs):
     """
     :param message_data: Message data eg: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",template:23,language:"hi"}]
     :type message_data: List of dict
@@ -30,7 +31,7 @@ def create_messages(message_data, **kwargs):
             Schedule messages and create file for created messages and pending messages if any 
         """
         awaazde_api = AwaazDeAPI(args.organization, args.username, args.password)
-        created_messages = awaazde_api.messages.create_bulk_in_chunks(message_data, **kwargs)
+        created_messages = awaazde_api.messages.create_bulk_in_chunks(message_data, transform_using_template, **kwargs)
         return created_messages
     except Exception as e:
         print(e)
@@ -48,8 +49,9 @@ if __name__ == '__main__':
     """
     Step 2: Create bulk Messages
     """
-    kwargs = {'transform_using_template': args.use_custom_format}
-    created_messages = create_messages(message_data, **kwargs)
+    transform_using_template = args.use_custom_format
+    kwargs = {'limit': APIConstants.DEFAULT_BULK_CREATE_LIMIT}
+    created_messages = create_messages(message_data, transform_using_template, **kwargs)
     """
     Step 3: Write created messages to csv
     """
