@@ -29,6 +29,7 @@ def create_messages(message_data, transform_using_template, **kwargs):
     :type: transform_using_template:Boolean
     :param: kwargs: Contains a param named "limit" where you specify the size of each batch in which messages are created.
                     If not specified, APIConstants.DEFAULT_BULK_CREATE_LIMIT will be used
+    :type: kwargs:Dictionary
     :return: Response from bulk create api(Create objects in chunks based on limit if present,
              takes DEFAULT_BULK_CREATE_LIMIT as default.)
     :rtype: List of dict [{phone_number:8929292929,send_on:"",tag1:"tag_number1",templatelanguage:23,language:"hi",status:"created"}}

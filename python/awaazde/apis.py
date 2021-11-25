@@ -88,7 +88,7 @@ class MessageAPI(BaseAPI):
             :type data: List of dict
             :param transform_using_template: True ;if It uses a predefined custom xact implementation like XFIN,
                                             False;if it is normal XACT.
-            :type message_data:Boolean
+            :type transform_using_template:Boolean
             :return: created messages from the message data.
         """
         bulk_url = self.url + "create_bulk/"

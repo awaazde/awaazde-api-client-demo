@@ -121,7 +121,7 @@ class BaseAPI(object):
         :param transform_using_template: True ;if It uses a predefined custom xact implementation like XFIN,
                          False;if it is normal XACT.
                          Note: We need to pop send "transform_using_template" as a separate parameter other than "data"because the ad2 api expects it to be a separate parameter,
-        :type: message_data:Boolean
+        :type: transform_using_template:Boolean
         :param kwargs: Contains a param named "limit" where you specify the size of each batch in which messages are created.
                     If not specified, APIConstants.DEFAULT_BULK_CREATE_LIMIT will be used
         :return: Response from bulk create api(Create objects in chunks based on limit if present,
