@@ -82,10 +82,16 @@ class MessageAPI(BaseAPI):
 
         return self._client.post(upload_url, **data)
 
-    def create_bulk(self, data):
+    def create_bulk(self, data, transform_using_template=False, **kwargs):
         """
-        This will create new object
+            :param data: Message data eg: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",template:23,language:"hi"}]
+            :type data: List of dict
+            :param transform_using_template: True ;if It uses a predefined custom xact implementation like XFIN,
+                                            False;if it is normal XACT.
+            :type transform_using_template:Boolean
+            :return: created messages from the message data.
         """
         bulk_url = self.url + "create_bulk/"
-        data = {'json': data}
+        params = {'data': data, 'transform_using_template': transform_using_template}
+        params = {'json': params}
         return self._client.post(bulk_url, **self._append_headers(data))
