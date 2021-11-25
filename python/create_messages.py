@@ -22,9 +22,16 @@ def parse_arguments():
 def create_messages(message_data, transform_using_template, **kwargs):
     """
     :param message_data: Message data eg: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",template:23,language:"hi"}]
-    :type message_data: List of dict
-    :return: created messages from the message data.
-    :type created_messages: List of dict
+    :type: message_data: List of dict
+    :param transform_using_template: True ;if It uses a predefined custom xact implementation like XFIN,
+                     False;if it is normal XACT.
+                     Note: We need to pop send "transform_using_template" as a separate parameter other than "data"because the ad2 api expects it to be a separate parameter,
+    :type: transform_using_template:Boolean
+    :param: kwargs: Contains a param named "limit" where you specify the size of each batch in which messages are created.
+                    If not specified, APIConstants.DEFAULT_BULK_CREATE_LIMIT will be used
+    :return: Response from bulk create api(Create objects in chunks based on limit if present,
+             takes DEFAULT_BULK_CREATE_LIMIT as default.)
+    :rtype: List of dict [{phone_number:8929292929,send_on:"",tag1:"tag_number1",templatelanguage:23,language:"hi",status:"created"}}
     """
     try:
         """
