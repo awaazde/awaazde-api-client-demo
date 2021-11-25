@@ -18,11 +18,12 @@ def parse_arguments():
     parser.add_argument("--params", nargs='+', help="Fields on which filters are to be applied."
                                                     "Set a number of key-value pairs within double-quotes "
                                                     "(do not put spaces before or after the = sign)."
-                                                    "Example: --params send_on__gt => a date in the format "
-                                                    "YYYY-MM-DDTHH:MM:SS to filter by messages scheduled after the "
-                                                    "given date send_on__lt => a date in the format "
-                                                    "YYYY-MM-DDTHH:MM:SS to filter by messages scheduled before the "
-                                                    "given date 'tags'='dummy_tag' ")
+                                                    "Eg: --params send_on__gt=DATE(date-format should be "
+                                                    "YYYY-MM-DDTHH:MM:SS) to filter by messages scheduled after the "
+                                                    "given date ;"
+                                                    "send_on__lt =DATE(date-format should be "
+                                                    "YYYY-MM-DDTHH:MM:SS) to filter by messages scheduled before the "
+                                                    "given date; 'tags'='dummy_tag' ")
     parser.add_argument('--match_criteria', type=str,
                         help='Field to use when matching User record with the queried resultant record',
                         default=CommonConstants.ID_FIELD)
