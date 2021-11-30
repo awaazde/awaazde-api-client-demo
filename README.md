@@ -16,7 +16,7 @@ For Java
 Jackson (See http://wiki.fasterxml.com/JacksonHome)
 Jersy Bundle (See https://jersey.java.net/)
 
-Use Maven to download dependency and mavenize the sdk-java project.
+Use Maven to download dependency and mavenize the java project.
 
 For PHP
    * Guzzle (See https://github.com/guzzle/guzzle)
@@ -31,19 +31,19 @@ For Python
 
 To use sample for java language.
 
-   * Copy the sdk-java folder on your local environment.
+   * Copy the java folder on your local environment.
    * Download the required jar dependency using maven. `mvn install` (alternatively you can use your favourite editor and update the maven project)
    * Refer to `APIDemo.java` file for reference on how to call different apis.
 
 To use sample for php language.
 
-   * Copy the sdk-php folder on your local environment.
+   * Copy the php folder on your local environment.
    * Run demo - You can copy paste the demo folder on your server, change the auth details and check various example described there
 
 
 To use sample for python language.
 
-   * Copy the sdk-python folder on your local environment.
+   * Copy the python folder on your local environment.
    * Refer to `example.py` file for reference on how to call different apis.
 
 ## More help
@@ -52,4 +52,4 @@ To use sample for python language.
    * [Reporting issues / feature requests](https://github.com/awaazde/awaazde-api-client/issues)
 
 
-###### Note that this SDK works for only v2.0 of Awaaz De app. If you are looking for old version, download release v1.0
+###### Note that this Demo works for only v2.0 of Awaaz De app. If you are looking for old version, download release v1.0
