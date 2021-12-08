@@ -1,6 +1,6 @@
 # Awaaz.De Rest APIs
 
-This repository contains Demo to consume/call Awaaz.De REST APIs.
+This repository contains round trip demo code to consume/call Awaaz.De REST APIs.
 
 
 ## What is  Awaaz.De APIs?
