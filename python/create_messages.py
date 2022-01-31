@@ -4,7 +4,7 @@ import os
 
 from awaazde import AwaazDeAPI
 from awaazde.utils import CSVUtils
-from python.awaazde.constants import APIConstants
+from awaazde.constants import APIConstants
 
 
 def parse_arguments():

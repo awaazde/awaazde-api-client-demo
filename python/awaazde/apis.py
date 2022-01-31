@@ -94,4 +94,4 @@ class MessageAPI(BaseAPI):
         bulk_url = self.url + "create_bulk/"
         params = {'data': data, 'transform_using_template': transform_using_template}
         params = {'json': params}
-        return self._client.post(bulk_url, **self._append_headers(data))
+        return self._client.post(bulk_url, **self._append_headers(params))
