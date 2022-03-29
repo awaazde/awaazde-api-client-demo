@@ -114,14 +114,10 @@ class BaseAPI(object):
         data['headers'] = headers
         return data
 
-    def create_bulk_in_chunks(self, data, transform_using_template=False, **kwargs):
+    def create_bulk_in_chunks(self, data, **kwargs):
         """
         :param data: Message data eg: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",template:23,language:"hi"}]
         :type: data: List of dict
-        :param transform_using_template: True ;if It uses a predefined custom xact implementation like XFIN,
-                         False;if it is normal XACT.
-                         Note: We need to pop send "transform_using_template" as a separate parameter other than "data"because the ad2 api expects it to be a separate parameter,
-        :type: transform_using_template:Boolean
         :param kwargs: Contains a param named "limit" where you specify the size of each batch in which messages are created.
                     If not specified, APIConstants.DEFAULT_BULK_CREATE_LIMIT will be used
         :return: Response from bulk create api(Create objects in chunks based on limit if present,
@@ -131,7 +127,11 @@ class BaseAPI(object):
         limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
         response = []
         for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
-            response += self.create_bulk(data_chunk, transform_using_template, **kwargs)
+            try:
+                rsp = self.create_bulk(data_chunk, **kwargs)
+                response += rsp
+            except Exception:
+                break
         return response
 
     def list_depaginated(self, params=None):
