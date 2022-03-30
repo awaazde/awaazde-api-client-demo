@@ -2,7 +2,7 @@ import requests
 
 from .exceptions import APIException
 from .resource import APIResource
-
+from requests.adapters import HTTPAdapter, Retry
 
 class ApiClient(object):
     """
@@ -48,11 +48,17 @@ class ApiClient(object):
     def _request(self, method, url, **kwargs):
         content = None
         try:
-            result = requests.request(method, url, **kwargs)
+            s = requests.Session()
+            retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504], method_whitelist=False)
+            s.mount('https://api.awaaz.de/', HTTPAdapter(max_retries=retries))
+            req = requests.Request(method, url, **kwargs)
+            prepped = s.prepare_request(req)
+            result = s.send(prepped)
             content = result.content
-            result.raise_for_status()
             status_code = result.status_code
-        except Exception:
+            if status_code not in [200, 201, 204, 502, 503, 504]:
+                result.raise_for_status()
+        except Exception as e:
             # catching all exception
             raise APIException(content)
         return self._resource.from_json(content) if content and status_code != 204 else True
