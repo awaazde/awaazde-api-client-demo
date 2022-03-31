@@ -126,6 +126,8 @@ class BaseAPI(object):
         """
         limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
         response = []
+        # on each data chunk, if request threw any expections i.e Too many HTTP requestes, then we'll break this loop and return successfull responses
+        # So upload summary is created based on  this responses
         for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
             try:
                 rsp = self.create_bulk(data_chunk, **kwargs)
