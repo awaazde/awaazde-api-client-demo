@@ -126,7 +126,12 @@ class BaseAPI(object):
         limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
         file_path = kwargs.get('file_path')
         response = []
+<<<<<<< HEAD
         append = False
+=======
+        # on each data chunk, if request threw any expections i.e Too many HTTP requestes, then we'll break this loop and return successfull responses
+        # So upload summary is created based on  this responses
+>>>>>>> c2ddae1a5ede1fd162f018c632098b67fd89d34c
         for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
             try:
                 print(len(data))

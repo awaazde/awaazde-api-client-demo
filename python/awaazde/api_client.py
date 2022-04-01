@@ -48,6 +48,9 @@ class ApiClient(object):
     def _request(self, method, url, **kwargs):
         content = None
         try:
+            # All requests for one create_bulk API will go on one session
+            # If first request on a session hits 502 from server than it'll autoretry 5 times on time interval 0s,2s, 4s,8s, 16s
+            # If all 5 retries will be failed than it'll throw an exception of "Too Many Requests"
             s = requests.Session()
             retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504], method_whitelist=False)
             s.mount('https://api.awaaz.de/', HTTPAdapter(max_retries=retries))
