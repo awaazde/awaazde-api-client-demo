@@ -33,8 +33,8 @@ def create_messages(message_data,  **kwargs):
             Schedule messages and create file for created messages and pending messages if any 
         """
         awaazde_api = AwaazDeAPI(args.organization, args.username, args.password)
-        created_messages = awaazde_api.messages.create_bulk_in_chunks(message_data, **kwargs)
-        return created_messages
+        awaazde_api.messages.create_bulk_and_save_in_chunks(message_data, **kwargs)
+        
     except Exception as e:
         print(e)
         logging.error("Error occurred trying to schedule calls:{} ".format(e))
@@ -52,9 +52,8 @@ if __name__ == '__main__':
     Step 2: Create bulk Messages
     """
     kwargs = {'limit': APIConstants.DEFAULT_BULK_CREATE_LIMIT}
-    created_messages = create_messages(message_data, **kwargs)
-    """
-    Step 3: Write created messages to csv
-    """
-    CSVUtils.write_csv(created_messages, file_path, file_name="created")
+    kwargs = {'file_path':file_path}
+
+    create_messages(message_data, **kwargs)
+
     logging.info("Completed")

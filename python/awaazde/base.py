@@ -4,8 +4,7 @@ import urllib.parse
 from .api_client import ApiClient
 from .constants import APIConstants
 from .exceptions import APIException
-from .utils import CommonUtils
-
+from .utils import CommonUtils, CSVUtils
 
 class BaseAPI(object):
     """
@@ -114,7 +113,7 @@ class BaseAPI(object):
         data['headers'] = headers
         return data
 
-    def create_bulk_in_chunks(self, data, **kwargs):
+    def create_bulk_and_save_in_chunks(self, data, **kwargs):
         """
         :param data: Message data eg: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",template:23,language:"hi"}]
         :type: data: List of dict
@@ -125,14 +124,20 @@ class BaseAPI(object):
         :rtype: List of dict [{phone_number:8929292929,send_on:"",tag1:"tag_number1",templatelanguage:23,language:"hi",status:"created"}}
         """
         limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
+        file_path = kwargs.get('file_path')
         response = []
+        append = False
         for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
             try:
+                print(len(data))
                 rsp = self.create_bulk(data_chunk, **kwargs)
-                response += rsp
-            except Exception:
+                CSVUtils.write_or_append_to_csv(rsp, file_path, file_name='created', append=append)
+                if not append:
+                    append = True
+            except Exception as exp:
+                print(exp)
                 break
-        return response
+
 
     def list_depaginated(self, params=None):
         """

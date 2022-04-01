@@ -29,14 +29,16 @@ class CommonUtils(object):
 
 class CSVUtils(object):
     @staticmethod
-    def write_csv(data, file_path, file_name):
+    def write_or_append_to_csv(data, file_path, file_name, append):
         if data:
             keys = list(data[0].keys())
-            with open('{}/{}.csv'.format(file_path, file_name),
-                      'w')  as output_file:
+            write_append_mode = 'a' if append else 'w'
+            with open('{}/{}.csv'.format(file_path, file_name), write_append_mode)  as output_file:
                 writer = csv.DictWriter(output_file, fieldnames=keys, extrasaction='ignore')
-                writer.writeheader()
+                if not append:
+                    writer.writeheader()
                 writer.writerows(data)
+
 
     @staticmethod
     def read_csv(csv_file_path, replace_null=False):
