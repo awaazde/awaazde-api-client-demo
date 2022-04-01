@@ -15,7 +15,7 @@ def parse_arguments():
     parser.add_argument('organization', type=str, help='Organization of the tenant')
     parser.add_argument('matching_messages_file_path', type=str,
                         help='Path for the csv with which filtered data is to be matched')
-    parser.add_argument("--params", nargs='+', help="Fields on which filters are to be applied."
+    parser.add_argument("--params", type=str, help="Fields on which filters are to be applied."
                                                     "Set a number of key-value pairs within double-quotes "
                                                     "(do not put spaces before or after the = sign)."
                                                     "Eg: --params send_on__gt=DATE(date-format should be "
@@ -41,13 +41,9 @@ if __name__ == '__main__':
     """
         Step 2 : Send an api request to get list of messages based on filters
     """
-    params = {'fields': ','.join(
-        [CommonConstants.PHONE_NUMBER_FIELD, CommonConstants.ID_FIELD, CommonConstants.SEND_ON_FIELD]),
-    }
-    filters = dict(list(map(str.strip, s.split('='))) for s in args.params)
-    params.update(filters)
-
-    messages_from_api = awaazde_api.messages.list_depaginated(params)
+    arguments = args.params.split(',')
+    filters = dict(list(map(str.strip, s.split('='))) for s in arguments)
+    messages_from_api = awaazde_api.messages.list_depaginated(filters)
 
     """
         Step 3:  Match Messages from the api and from user's csv based on filters if they exist
@@ -63,7 +59,7 @@ if __name__ == '__main__':
             Step 4:  Dump the data in a file for the user
         """
         file_path = os.path.dirname(args.matching_messages_file_path)
-        CSVUtils.write_csv(matched, file_path, file_name="matched_{}".format(datetime.now().timestamp()))
-        CSVUtils.write_csv(unmatched, file_path, file_name="unmatched_{}".format(datetime.now().timestamp()))
+        CSVUtils.write_or_append_to_csv(matched, file_path, file_name="matched_{}".format(str(datetime.now())))
+        CSVUtils.write_or_append_to_csv(unmatched, file_path, file_name="unmatched_{}".format(str(datetime.now())))
     else:
         logging.info(" No messages Found matching with your criteria")

@@ -6,5 +6,5 @@ class CommonConstants():
 
 
 class APIConstants():
-    # Backend can only handle 10k records per request. So setting this limit
+    # Backend can handle 10k records per request. But request session got limited by 5k. So setting this limit
     DEFAULT_BULK_CREATE_LIMIT = 5000

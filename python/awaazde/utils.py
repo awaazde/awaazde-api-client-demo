@@ -29,7 +29,7 @@ class CommonUtils(object):
 
 class CSVUtils(object):
     @staticmethod
-    def write_or_append_to_csv(data, file_path, file_name, append):
+    def write_or_append_to_csv(data, file_path, file_name, append=False):
         if data:
             keys = list(data[0].keys())
             write_append_mode = 'a' if append else 'w'
