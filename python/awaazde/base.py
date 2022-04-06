@@ -4,8 +4,7 @@ import urllib.parse
 from .api_client import ApiClient
 from .constants import APIConstants
 from .exceptions import APIException
-from .utils import CommonUtils
-
+from .utils import CommonUtils, CSVUtils
 
 class BaseAPI(object):
     """
@@ -44,7 +43,7 @@ class BaseAPI(object):
         """
         This will return list of resources.
         """
-        data = {'params': kwargs}
+        data = kwargs
         return self._client.get(self.url, **self._append_headers(data))
 
     def create(self, data):
@@ -114,14 +113,10 @@ class BaseAPI(object):
         data['headers'] = headers
         return data
 
-    def create_bulk_in_chunks(self, data, transform_using_template=False, **kwargs):
+    def create_bulk_and_save_in_chunks(self, data, **kwargs):
         """
         :param data: Message data eg: [{phone_number:8929292929,send_on:"",tag1:"tag_number1",template:23,language:"hi"}]
         :type: data: List of dict
-        :param transform_using_template: True ;if It uses a predefined custom xact implementation like XFIN,
-                         False;if it is normal XACT.
-                         Note: We need to pop send "transform_using_template" as a separate parameter other than "data"because the ad2 api expects it to be a separate parameter,
-        :type: transform_using_template:Boolean
         :param kwargs: Contains a param named "limit" where you specify the size of each batch in which messages are created.
                     If not specified, APIConstants.DEFAULT_BULK_CREATE_LIMIT will be used
         :return: Response from bulk create api(Create objects in chunks based on limit if present,
@@ -129,10 +124,21 @@ class BaseAPI(object):
         :rtype: List of dict [{phone_number:8929292929,send_on:"",tag1:"tag_number1",templatelanguage:23,language:"hi",status:"created"}}
         """
         limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
+        file_path = kwargs.get('file_path')
         response = []
+        append = False
+        # Here we are writing each response to file. First response will pass headers to file, while other just append to same file
         for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
-            response += self.create_bulk(data_chunk, transform_using_template, **kwargs)
-        return response
+            try:
+                print(len(data))
+                rsp = self.create_bulk(data_chunk, **kwargs)
+                CSVUtils.write_or_append_to_csv(rsp, file_path, file_name='created', append=append)
+                if not append:
+                    append = True
+            except Exception as exp:
+                print(exp)
+                break
+
 
     def list_depaginated(self, params=None):
         """
@@ -140,14 +146,15 @@ class BaseAPI(object):
         """
         data = []
         response = self.list(params=params)
+        data.extend(response['results'])
         while response.get('next') is not None:
             # Get next page URL
             next_page_url = response['next']
             params['page'] = urllib.parse.parse_qs(urllib.parse.urlparse(next_page_url).query)['page'][0]
             # And then we request for the data on the next page
             response = self.list(params=params)
-
-        if response:
-            data.extend(response['results'])
-        else:
-            logging.error("Error in Fetching Results")
+            if response:
+                data.extend(response['results'])
+            else:
+                logging.error("Error in Fetching Results")
+        return data
