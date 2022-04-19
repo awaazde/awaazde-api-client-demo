@@ -1,6 +1,6 @@
 import logging
 import urllib.parse
-
+import os
 from .api_client import ApiClient
 from .constants import APIConstants
 from .exceptions import APIException
@@ -125,16 +125,21 @@ class BaseAPI(object):
         """
         limit = kwargs.get('limit') if kwargs.get('limit') else APIConstants.DEFAULT_BULK_CREATE_LIMIT
         file_path = kwargs.get('file_path')
+        dir_path = os.path.dirname(file_path)
+        file_name = "message_upload_summary_" + os.path.basename(file_path)
         response = []
+        remaining = len(data)
         append = False
         # Here we are writing each response to file. First response will pass headers to file, while other just append to same file
         for data_chunk in CommonUtils.process_iterable_in_chunks(data, limit):
             try:
-                print(len(data))
+
                 rsp = self.create_bulk(data_chunk, **kwargs)
-                CSVUtils.write_or_append_to_csv(rsp, file_path, file_name='created', append=append)
+                CSVUtils.write_or_append_to_csv(rsp, dir_path, file_name=file_name, append=append)
                 if not append:
                     append = True
+                remaining -= len(data_chunk)
+                print("Remaninng uploading is", remaining)
             except Exception as exp:
                 print(exp)
                 break

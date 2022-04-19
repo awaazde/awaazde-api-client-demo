@@ -46,7 +46,10 @@ if __name__ == '__main__':
     """
     Step 1: Get Messages from CSV file
     """
-    file_path = os.path.dirname(args.messages_file_path)
+    if os.path.exists(args.messages_file_path):
+        file_path = args.messages_file_path
+    else:
+        print("File path don't exists")
     headers, message_data = CSVUtils.read_csv(args.messages_file_path)
     """
     Step 2: Create bulk Messages
@@ -56,4 +59,4 @@ if __name__ == '__main__':
 
     create_messages(message_data, **kwargs)
 
-    logging.info("Completed")
+    print("Completed")

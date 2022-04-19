@@ -32,6 +32,8 @@ class CSVUtils(object):
     def write_or_append_to_csv(data, file_path, file_name, append=False):
         if data:
             keys = list(data[0].keys())
+            if 'error' not in keys:
+                keys.extend(["error"])
             write_append_mode = 'a' if append else 'w'
             with open('{}/{}.csv'.format(file_path, file_name), write_append_mode)  as output_file:
                 writer = csv.DictWriter(output_file, fieldnames=keys, extrasaction='ignore')
