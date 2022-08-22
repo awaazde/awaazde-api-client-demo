@@ -49,7 +49,7 @@ class CSVUtils(object):
                       If set to False: Null values will remain blank. (In cases like "send_on" date,
                       we want it blank,so default for this function w.r.t the usage of this Demo has been kept as false)
         """
-        df = pd.read_csv(csv_file_path, na_filter=replace_null)
+        df = pd.read_csv(csv_file_path, na_filter=replace_null, dtype=str)
         headers = df.head()
         data = df.to_dict('records')
         return headers, data
