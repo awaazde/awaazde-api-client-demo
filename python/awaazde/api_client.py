@@ -54,6 +54,9 @@ class ApiClient(object):
             s = requests.Session()
             retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504], method_whitelist=False)
             s.mount('https://api.awaaz.de/', HTTPAdapter(max_retries=retries))
+            # Our firewall sucuri is blocking the request because there is no referer header and login cookie present in the request. 
+            # We have raised a ticket on Sucuri platform to check if there is any workaround for this. Till then we are adding this 
+            # temporary change of headers and cookies.
             s.headers.update({'referer':'https://app.awaaz.de/'})
             s.cookies.set('login_cookie','1234567890',domain="awaaz.de",path="/")
             req = requests.Request(method, url, **kwargs)
