@@ -54,6 +54,8 @@ class ApiClient(object):
             s = requests.Session()
             retries = Retry(total=5, backoff_factor=1, status_forcelist=[502, 503, 504], method_whitelist=False)
             s.mount('https://api.awaaz.de/', HTTPAdapter(max_retries=retries))
+            s.headers.update({'referer':'https://app.awaaz.de/'})
+            s.cookies.set('login_cookie','1234567890',domain="awaaz.de",path="/")
             req = requests.Request(method, url, **kwargs)
             prepped = s.prepare_request(req)
             result = s.send(prepped)
